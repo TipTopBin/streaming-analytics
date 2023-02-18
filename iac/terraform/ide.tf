@@ -49,12 +49,10 @@ set -e
 
 mkdir -p /graviton-university
 rm -rf /graviton-university/streaming-analytics
-git clone https://github.com/DATACNTOP/streaming-analytics.git /graviton-university/streaming-analytics
+# git clone https://github.com/DATACNTOP/streaming-analytics.git /graviton-university/streaming-analytics
 (cd /graviton-university/streaming-analytics && git checkout ${var.repository_ref})
 
-# (cd /graviton-university/streaming-analytics/environment && bash ./installer.sh)
-(cd /graviton-university/streaming-analytics/environment/scripts && bash ./prepareCloud9IDE-slim.sh)
-
+(cd /graviton-university/streaming-analytics/environment && bash ./installer.sh)
 
 bash -c "aws cloud9 update-environment --environment-id $CLOUD9_ENVIRONMENT_ID --managed-credentials-action DISABLE || true"
 

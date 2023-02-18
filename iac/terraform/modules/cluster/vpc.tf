@@ -150,13 +150,13 @@ data "aws_route_tables" "private_route_table_az3" {
   
 }
 
-resource "aws_route" "private_subnet_nat_gateway_az2_1" {
+resource "aws_route" "private_subnet_nat_gateway_az3_1" {
   route_table_id            = tolist(data.aws_route_tables.private_route_table_az3.ids)[0]
   destination_cidr_block    = "0.0.0.0/0"
   nat_gateway_id            = "${aws_nat_gateway.nat_gateway_03.id}"
 }
 
-resource "aws_route" "private_subnet_nat_gateway_az2_2" {
+resource "aws_route" "private_subnet_nat_gateway_az3_2" {
   route_table_id            = tolist(data.aws_route_tables.private_route_table_az3.ids)[1]
   destination_cidr_block    = "0.0.0.0/0"
   nat_gateway_id            = "${aws_nat_gateway.nat_gateway_03.id}"
