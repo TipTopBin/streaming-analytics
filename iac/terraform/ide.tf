@@ -49,7 +49,6 @@ set -e
 
 mkdir -p /graviton-university
 rm -rf /graviton-university/streaming-analytics
-# git clone https://github.com/DATACNTOP/streaming-analytics.git /graviton-university/streaming-analytics
 (cd /graviton-university/streaming-analytics && git checkout ${var.repository_ref})
 
 (cd /graviton-university/streaming-analytics/environment && bash ./installer.sh)
@@ -91,6 +90,8 @@ sudo -H -u ec2-user bash -c 'git config --global user.name "Graviton University 
 EOF
 }
 
+
+# git clone https://github.com/DATACNTOP/streaming-analytics.git /graviton-university/streaming-analytics
 
 # rm -rf /tmp/graviton-university
 # git clone https://github.com/DATACNTOP/streaming-analytics.git /tmp/graviton-university
