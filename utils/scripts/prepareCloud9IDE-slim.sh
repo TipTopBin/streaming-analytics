@@ -62,22 +62,13 @@ helm repo add stable https://charts.helm.sh/stable
 
 
 echo "==============================================="
-echo "  Install Flux CLI ......"
-echo "==============================================="
-curl -s https://fluxcd.io/install.sh | sudo bash
-flux --version
-
-
-echo "==============================================="
 echo "  More Aliases ......"
 echo "==============================================="
 cat >> ~/.bashrc <<EOF
 alias c=clear
 EOF
-source ~/.bashrc
-
 
 # 最后再执行一次 source
-echo "source .bashrc"
+echo "source ~/.bashrc"
 shopt -s expand_aliases
 source ~/.bashrc
