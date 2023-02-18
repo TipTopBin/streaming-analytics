@@ -49,6 +49,7 @@ set -e
 
 mkdir -p /graviton-university
 rm -rf /graviton-university/streaming-analytics
+git clone https://github.com/DATACNTOP/streaming-analytics.git /graviton-university/streaming-analytics
 (cd /graviton-university/streaming-analytics && git checkout ${var.repository_ref})
 
 (cd /graviton-university/streaming-analytics/environment && bash ./installer.sh)
@@ -61,7 +62,6 @@ cp /graviton-university/streaming-analytics/environment/bin/* /usr/local/bin
 
 sudo -H -u ec2-user bash -c "ln -sf /graviton-university/streaming-analytics ~/environment/streaming-analytics"
 
-sudo -H -u ec2-user bash -c "git clone https://github.com/DATACNTOP/emr-on-eks-benchmark.git ~/environment/emr-on-eks-benchmark"
 
 
 if [[ ! -d "/home/ec2-user/.bashrc.d" ]]; then
@@ -91,7 +91,8 @@ EOF
 }
 
 
-# git clone https://github.com/DATACNTOP/streaming-analytics.git /graviton-university/streaming-analytics
+# sudo -H -u ec2-user bash -c "git clone https://github.com/DATACNTOP/emr-on-eks-benchmark.git ~/environment/emr-on-eks-benchmark"
+
 
 # rm -rf /tmp/graviton-university
 # git clone https://github.com/DATACNTOP/streaming-analytics.git /tmp/graviton-university

@@ -2,26 +2,36 @@
 
 set -e
 
-kubectl_version='1.23.9'
-kubectl_checksum='053561f7c68c5a037a69c52234e3cf1f91798854527692acd67091d594b616ce'
+# kubectl_version='1.23.9'
+# kubectl_checksum='053561f7c68c5a037a69c52234e3cf1f91798854527692acd67091d594b616ce'
 
-helm_version='3.10.1'
-helm_checksum='c12d2cd638f2d066fec123d0bd7f010f32c643afdf288d39a4610b1f9cb32af3'
+# helm_version='3.10.1'
+# helm_checksum='c12d2cd638f2d066fec123d0bd7f010f32c643afdf288d39a4610b1f9cb32af3'
 
-eksctl_version='0.115.0'
-eksctl_checksum='d1d6d6d56ae33f47242f769bea4b19587f1200e5bbef65f3a35d159ed2463716'
+# eksctl_version='0.115.0'
+# eksctl_checksum='d1d6d6d56ae33f47242f769bea4b19587f1200e5bbef65f3a35d159ed2463716'
 
-kustomize_version='4.5.7'
-kustomize_checksum='701e3c4bfa14e4c520d481fdf7131f902531bfc002cb5062dcf31263a09c70c9'
+# kustomize_version='4.5.7'
+# kustomize_checksum='701e3c4bfa14e4c520d481fdf7131f902531bfc002cb5062dcf31263a09c70c9'
 
-kubeseal_version='0.18.4'
-kubeseal_checksum='2e765b87889bfcf06a6249cde8e28507e3b7be29851e4fac651853f7638f12f3'
+kustomize_version='5.0.0'
+kustomize_checksum='2e8c28a80ce213528251f489db8d2dcbea7c63b986c8f7595a39fc76ff871cd7'
 
-yq_version='4.30.4'
-yq_checksum='30459aa144a26125a1b22c62760f9b3872123233a5658934f7bd9fe714d7864d'
+# kubeseal_version='0.18.4'
+# kubeseal_checksum='2e765b87889bfcf06a6249cde8e28507e3b7be29851e4fac651853f7638f12f3'
 
-flux_version='0.38.3'
-flux_checksum='268b8d9a2fa5b0c9e462b551eaefdadb9e03370eb53061a88a2a9ac40e95e8e4'
+kubeseal_version='0.19.5'
+kubeseal_checksum='9f8de35b8272533cc687c909ce717d4340aea23a16a3e422a92a6105f23b835b'
+
+# yq_version='4.30.4'
+# yq_checksum='30459aa144a26125a1b22c62760f9b3872123233a5658934f7bd9fe714d7864d'
+
+yq_version='4.30.6'
+yq_checksum='2aabdd748d301fc2286ea9f73eb20477b4ce173fbf072e0102fff1fcbed05985'
+
+# flux_version='0.38.3'
+# flux_checksum='268b8d9a2fa5b0c9e462b551eaefdadb9e03370eb53061a88a2a9ac40e95e8e4'
+
 
 download_and_verify () {
   url=$1
@@ -47,19 +57,19 @@ download_and_verify "https://dl.k8s.io/release/v$kubectl_version/bin/linux/amd64
 chmod +x ./kubectl
 mv ./kubectl /usr/local/bin
 
-# helm
-download_and_verify "https://get.helm.sh/helm-v$helm_version-linux-amd64.tar.gz" "$helm_checksum" "helm.tar.gz"
-tar zxf helm.tar.gz
-chmod +x linux-amd64/helm
-mv ./linux-amd64/helm /usr/local/bin
-rm -rf linux-amd64/ helm.tar.gz
+# # helm
+# download_and_verify "https://get.helm.sh/helm-v$helm_version-linux-amd64.tar.gz" "$helm_checksum" "helm.tar.gz"
+# tar zxf helm.tar.gz
+# chmod +x linux-amd64/helm
+# mv ./linux-amd64/helm /usr/local/bin
+# rm -rf linux-amd64/ helm.tar.gz
 
-# eksctl
-download_and_verify "https://github.com/weaveworks/eksctl/releases/download/v$eksctl_version/eksctl_Linux_amd64.tar.gz" "$eksctl_checksum" "eksctl_Linux_amd64.tar.gz"
-tar zxf eksctl_Linux_amd64.tar.gz
-chmod +x eksctl
-mv ./eksctl /usr/local/bin
-rm -rf eksctl_Linux_amd64.tar.gz
+# # eksctl
+# download_and_verify "https://github.com/weaveworks/eksctl/releases/download/v$eksctl_version/eksctl_Linux_amd64.tar.gz" "$eksctl_checksum" "eksctl_Linux_amd64.tar.gz"
+# tar zxf eksctl_Linux_amd64.tar.gz
+# chmod +x eksctl
+# mv ./eksctl /usr/local/bin
+# rm -rf eksctl_Linux_amd64.tar.gz
 
 # kustomize
 download_and_verify "https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize%2Fv${kustomize_version}/kustomize_v${kustomize_version}_linux_amd64.tar.gz" "$kustomize_checksum" "kustomize.tar.gz"
@@ -86,9 +96,9 @@ download_and_verify "https://github.com/mikefarah/yq/releases/download/v${yq_ver
 chmod +x ./yq
 mv ./yq /usr/local/bin
 
-# flux
-download_and_verify "https://github.com/fluxcd/flux2/releases/download/v${flux_version}/flux_${flux_version}_linux_amd64.tar.gz" "$flux_checksum" "flux.tar.gz"
-tar zxf flux.tar.gz
-chmod +x flux
-mv ./flux /usr/local/bin
-rm -rf flux.tar.gz
+# # flux
+# download_and_verify "https://github.com/fluxcd/flux2/releases/download/v${flux_version}/flux_${flux_version}_linux_amd64.tar.gz" "$flux_checksum" "flux.tar.gz"
+# tar zxf flux.tar.gz
+# chmod +x flux
+# mv ./flux /usr/local/bin
+# rm -rf flux.tar.gz
