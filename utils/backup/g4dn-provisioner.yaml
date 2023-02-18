@@ -1,0 +1,70 @@
+apiVersion: karpenter.sh/v1alpha5
+kind: Provisioner
+metadata:
+  name: g4dn-spot-provisioner
+spec:
+  consolidation:
+    enabled: true
+  ttlSecondsUntilExpired: 2592000 # 30 Days = 60 * 60 * 24 * 30 Seconds;
+  weight: 100 # 值越大，优先级越高
+  
+  requirements:
+    - key: karpenter.sh/capacity-type
+      operator: In
+      values: ["spot"]
+    - key: "node.kubernetes.io/instance-type"
+      operator: In
+      values: ["g4dn.xlarge"]
+    - key: "topology.kubernetes.io/zone"
+      operator: In
+      values: ["ap-southeast-1c"]
+    - key: "kubernetes.io/arch"
+      operator: In
+      values: ["amd64"] # arm64
+  limits:
+    resources:
+      cpu: 1000
+      memory: 2000Gi      
+  providerRef: # optional, recommended to use instead of provider
+    name: flink      
+  labels:
+    eks.amazonaws.com/capacityType: 'SPOT'
+    cpu-architecture: x86
+    network: private      
+    group: 'NONE'
+---
+apiVersion: karpenter.sh/v1alpha5
+kind: Provisioner
+metadata:
+  name: g4dn-ondemand-provisioner
+spec:
+  consolidation:
+    enabled: false
+  ttlSecondsAfterEmpty: 60
+  ttlSecondsUntilExpired: 2592000 # 30 Days = 60 * 60 * 24 * 30 Seconds;
+  weight: 90 # 值越大，优先级越高
+  
+  requirements:
+    - key: karpenter.sh/capacity-type
+      operator: In
+      values: ["on-demand"]
+    - key: "node.kubernetes.io/instance-type"
+      operator: In
+      values: ["g4dn.xlarge"]
+    - key: "topology.kubernetes.io/zone"
+      operator: In
+      values: ["ap-southeast-1c"]
+    - key: "kubernetes.io/arch"
+      operator: In
+      values: ["amd64"] # arm64
+  limits:
+    resources:
+      cpu: 1000
+      memory: 2000Gi      
+  providerRef:
+    name: flink
+  labels:
+    eks.amazonaws.com/capacityType: 'ON_DEMAND'
+    cpu-architecture: x86
+    network: private      
+    group: 'NONE'

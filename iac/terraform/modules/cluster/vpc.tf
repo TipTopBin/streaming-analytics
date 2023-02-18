@@ -1,0 +1,65 @@
+locals {
+  vpc_cidr               = "10.22.0.0/16"
+  secondary_vpc_cidr     = "100.66.0.0/16"
+  primary_priv_subnets   = [for k, v in local.azs : cidrsubnet(local.vpc_cidr, 8, k + 10)]
+  secondary_priv_subnets = [for k, v in local.azs : cidrsubnet(local.secondary_vpc_cidr, 8, k + 10)]
+  public_subnets         = [for k, v in local.azs : cidrsubnet(local.vpc_cidr, 8, k)]
+
+  private_subnet_ids        = length(module.aws_vpc.private_subnets) > 0 ? slice(module.aws_vpc.private_subnets, 0, 3) : []
+  primary_private_subnet_id = length(module.aws_vpc.private_subnets) > 0 ? slice(module.aws_vpc.private_subnets, 0, 1) : []
+}
+
+module "aws_vpc" {
+  source  = "terraform-aws-modules/vpc/aws"
+  version = "~> 3.0"
+  
+  # version = "3.19.0"
+
+  name                  = var.environment_name
+  cidr                  = local.vpc_cidr
+  secondary_cidr_blocks = [local.secondary_vpc_cidr]
+  azs                   = local.azs
+
+  public_subnets = local.public_subnets
+  private_subnets = concat(
+    local.primary_priv_subnets,
+    local.secondary_priv_subnets
+  )
+  # 这种方式会拉起6个 NAT Gateway
+  # TODO 目前只需要主私有子网通过 NAT Gateway 出去
+  # private_subnets = local.primary_priv_subnets 
+  
+  enable_nat_gateway   = true
+  create_igw           = true
+  enable_dns_hostnames = true
+  # single_nat_gateway   = true
+
+  public_subnet_tags = {
+    "kubernetes.io/cluster/${var.environment_name}" = "shared"
+    "kubernetes.io/role/elb"                        = "1"
+  }
+
+  private_subnet_tags = {
+    "kubernetes.io/cluster/${var.environment_name}" = "shared"
+    "kubernetes.io/role/internal-elb"               = "1"
+    "karpenter.sh/discovery"                        = var.environment_name
+  }
+
+  tags = local.tags
+}
+
+
+data "aws_route_tables" "rts" {
+  vpc_id = module.aws_vpc.vpc_id
+
+  # filter {
+  #   name   = "tag:kubernetes.io/role"
+  #   values = ["private*"]
+  # }
+}
+
+resource "aws_vpc_endpoint" "s3" {
+  vpc_id            = module.aws_vpc.vpc_id
+  service_name      = "com.amazonaws.${data.aws_region.current.id}.s3"
+  route_table_ids   = data.aws_route_tables.rts.ids
+}
