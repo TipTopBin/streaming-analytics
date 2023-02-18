@@ -8,3 +8,6 @@
 - enable_aws_load_balancer_controller
 - enable_aws_for_fluentbit
 - enable_self_managed_aws_ebs_csi_driver
+
+2. installer.sh 
+文件内容修改需特别谨慎 
