@@ -29,7 +29,7 @@ module "aws_vpc" {
   # TODO 目前只需要主私有子网通过 NAT Gateway 出去
   # private_subnets = local.primary_priv_subnets 
   
-  enable_nat_gateway   = true
+  # enable_nat_gateway   = true
   create_igw           = true
   enable_dns_hostnames = true
   # single_nat_gateway   = true
@@ -48,8 +48,20 @@ module "aws_vpc" {
   tags = local.tags
 }
 
+resource "aws_eip" "eip_01" {
+  vpc = true
+}
+
+resource "aws_eip" "eip_02" {
+  vpc = true
+}
+
+resource "aws_eip" "eip_03" {
+  vpc = true
+}
 
 resource "aws_nat_gateway" "nat_gateway_01" {
+  allocation_id = aws_eip.eip_01.id
   subnet_id     = module.aws_vpc.public_subnets[0]
 
   tags = {
@@ -60,6 +72,7 @@ resource "aws_nat_gateway" "nat_gateway_01" {
 }
 
 resource "aws_nat_gateway" "nat_gateway_02" {
+  allocation_id = aws_eip.eip_02.id
   subnet_id     = module.aws_vpc.public_subnets[1]
 
   tags = {
@@ -70,6 +83,7 @@ resource "aws_nat_gateway" "nat_gateway_02" {
 }
 
 resource "aws_nat_gateway" "nat_gateway_03" {
+  allocation_id = aws_eip.eip_03.id
   subnet_id     = module.aws_vpc.public_subnets[2]
 
   tags = {
