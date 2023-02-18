@@ -93,17 +93,82 @@ resource "aws_nat_gateway" "nat_gateway_03" {
   depends_on = [module.aws_vpc]
 }
 
-data "aws_route_tables" "rts" {
+
+data "aws_route_tables" "private_route_table_az1" {
   vpc_id = module.aws_vpc.vpc_id
 
-  # filter {
-  #   name   = "tag:kubernetes.io/role"
-  #   values = ["private*"]
-  # }
+  filter {
+    name   = "tag:Name"
+    values = ["*private-${module.aws_vpc.azs[0]}"]
+  }
+  
+}
+
+resource "aws_route" "private_subnet_nat_gateway_az1_1" {
+  route_table_id            = tolist(data.aws_route_tables.private_route_table_az1.ids)[0]
+  destination_cidr_block    = "0.0.0.0/0"
+  nat_gateway_id            = "${aws_nat_gateway.nat_gateway_01.id}"
+}
+
+resource "aws_route" "private_subnet_nat_gateway_az1_2" {
+  route_table_id            = tolist(data.aws_route_tables.private_route_table_az1.ids)[1]
+  destination_cidr_block    = "0.0.0.0/0"
+  nat_gateway_id            = "${aws_nat_gateway.nat_gateway_01.id}"
+}
+
+
+data "aws_route_tables" "private_route_table_az2" {
+  vpc_id = module.aws_vpc.vpc_id
+
+  filter {
+    name   = "tag:Name"
+    values = ["*private-${module.aws_vpc.azs[1]}"]
+  }
+  
+}
+
+resource "aws_route" "private_subnet_nat_gateway_az2_1" {
+  route_table_id            = tolist(data.aws_route_tables.private_route_table_az2.ids)[0]
+  destination_cidr_block    = "0.0.0.0/0"
+  nat_gateway_id            = "${aws_nat_gateway.nat_gateway_02.id}"
+}
+
+resource "aws_route" "private_subnet_nat_gateway_az2_2" {
+  route_table_id            = tolist(data.aws_route_tables.private_route_table_az2.ids)[1]
+  destination_cidr_block    = "0.0.0.0/0"
+  nat_gateway_id            = "${aws_nat_gateway.nat_gateway_02.id}"
+}
+
+
+data "aws_route_tables" "private_route_table_az3" {
+  vpc_id = module.aws_vpc.vpc_id
+
+  filter {
+    name   = "tag:Name"
+    values = ["*private-${module.aws_vpc.azs[2]}"]
+  }
+  
+}
+
+resource "aws_route" "private_subnet_nat_gateway_az2_1" {
+  route_table_id            = tolist(data.aws_route_tables.private_route_table_az3.ids)[0]
+  destination_cidr_block    = "0.0.0.0/0"
+  nat_gateway_id            = "${aws_nat_gateway.nat_gateway_03.id}"
+}
+
+resource "aws_route" "private_subnet_nat_gateway_az2_2" {
+  route_table_id            = tolist(data.aws_route_tables.private_route_table_az3.ids)[1]
+  destination_cidr_block    = "0.0.0.0/0"
+  nat_gateway_id            = "${aws_nat_gateway.nat_gateway_03.id}"
+}
+
+
+data "aws_route_tables" "rtb_all" {
+  vpc_id = module.aws_vpc.vpc_id
 }
 
 resource "aws_vpc_endpoint" "s3" {
   vpc_id            = module.aws_vpc.vpc_id
   service_name      = "com.amazonaws.${data.aws_region.current.id}.s3"
-  route_table_ids   = data.aws_route_tables.rts.ids
+  route_table_ids   = data.aws_route_tables.rtb_all.ids
 }
