@@ -49,6 +49,36 @@ module "aws_vpc" {
 }
 
 
+resource "aws_nat_gateway" "nat_gateway_01" {
+  subnet_id     = module.aws_vpc.public_subnets[0]
+
+  tags = {
+    Name = "${var.environment_name}-nat-gateway-az1"
+  }
+
+  depends_on = [module.aws_vpc]
+}
+
+resource "aws_nat_gateway" "nat_gateway_02" {
+  subnet_id     = module.aws_vpc.public_subnets[1]
+
+  tags = {
+    Name = "${var.environment_name}-nat-gateway-az2"
+  }
+
+  depends_on = [module.aws_vpc]
+}
+
+resource "aws_nat_gateway" "nat_gateway_03" {
+  subnet_id     = module.aws_vpc.public_subnets[2]
+
+  tags = {
+    Name = "${var.environment_name}-nat-gateway-az3"
+  }
+
+  depends_on = [module.aws_vpc]
+}
+
 data "aws_route_tables" "rts" {
   vpc_id = module.aws_vpc.vpc_id
 
