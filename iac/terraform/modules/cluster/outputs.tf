@@ -179,7 +179,7 @@ output "emr_eks_spark_name" {
 }
 
 output "emr_eks_spark_arn" {
-  description = "EMR Virtual Cluster Id for Spark"
+  description = "EMR Virtual Cluster ARN for Spark"
   value       =  aws_emrcontainers_virtual_cluster.emr_eks_spark.arn
 }
 

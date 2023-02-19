@@ -168,14 +168,15 @@ module "eks_blueprints" {
     emr-eks-spark = {
       namespace               = "emr-spark"
       job_execution_role      = "emr-eks-spark"
-      additional_iam_policies = [aws_iam_policy.emr_on_eks.arn]
+      # Only add admin for debug usage
+      additional_iam_policies = [aws_iam_policy.emr_on_eks.arn, "arn:aws:iam::aws:policy/AdministratorAccess"]
     }
     
-    emr-eks-flink = {
-      namespace               = "emr-flink"
-      job_execution_role      = "emr-eks-flink"
-      additional_iam_policies = [aws_iam_policy.emr_on_eks.arn]
-    }
+    # emr-eks-flink = {
+    #   namespace               = "emr-flink"
+    #   job_execution_role      = "emr-eks-flink"
+    #   additional_iam_policies = [aws_iam_policy.emr_on_eks.arn]
+    # }
   }
 
 }
