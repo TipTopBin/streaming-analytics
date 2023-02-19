@@ -40,6 +40,9 @@ EKS_PUB_SUBNET_03=${module.cluster.public_subnet_ids[2]}
 EKS_PRI_SUBNET_01=${module.cluster.private_subnet_ids[0]}
 EKS_PRI_SUBNET_02=${module.cluster.private_subnet_ids[1]}
 EKS_PRI_SUBNET_03=${module.cluster.private_subnet_ids[2]}
+EMR_VIRTUAL_CLUSTER_NAME=${module.cluster.emr_eks_spark_name}
+EMR_VIRTUAL_CLUSTER_ID=${module.cluster.emr_eks_spark_arn}
+EMR_EKS_EXECUTION_ARN=${module.cluster.emr_on_eks_role_arn[0]}
 EOT
 
   bootstrap_script = <<EOF

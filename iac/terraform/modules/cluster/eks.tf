@@ -160,6 +160,42 @@ module "eks_blueprints" {
   #     subnet_ids = local.private_subnet_ids
   #   }
   # }
+  
+  
+  enable_emr_on_eks = true
+  
+  emr_on_eks_teams = {
+    emr-eks-spark = {
+      namespace               = "emr-spark"
+      job_execution_role      = "emr-eks-spark"
+      additional_iam_policies = [aws_iam_policy.emr_on_eks.arn]
+    }
+    
+    emr-eks-flink = {
+      namespace               = "emr-flink"
+      job_execution_role      = "emr-eks-flink"
+      additional_iam_policies = [aws_iam_policy.emr_on_eks.arn]
+    }
+  }
+
+}
+
+#---------------------------------------------------------------
+# Create EMR on EKS Virtual Cluster
+#---------------------------------------------------------------
+resource "aws_emrcontainers_virtual_cluster" "emr_eks_spark" {
+  name = format("%s-%s", module.eks_blueprints.eks_cluster_id, "emr-spark")
+
+  container_provider {
+    id   = module.eks_blueprints.eks_cluster_id
+    type = "EKS"
+
+    info {
+      eks_info {
+        namespace = "emr-spark"
+      }
+    }
+  }
 }
 
 resource "aws_security_group_rule" "dns_udp" {

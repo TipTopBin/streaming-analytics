@@ -171,3 +171,25 @@ output "oidc_provider" {
 #   value       = aws_iam_user_ssh_key.gitops.id
 #   description = "ID of the IAM SSH key for GitOps"
 # }
+
+output "emr_eks_spark_name" {
+  description = "EMR Virtual Cluster Name for Spark"
+  value       = aws_emrcontainers_virtual_cluster.emr_eks_spark.name
+  # value       =  format("%s-%s", module.eks_blueprints.eks_cluster_id, "emr-spark")
+}
+
+output "emr_eks_spark_arn" {
+  description = "EMR Virtual Cluster Id for Spark"
+  value       =  aws_emrcontainers_virtual_cluster.emr_eks_spark.arn
+}
+
+output "emr_on_eks_role_arn" {
+  description = "IAM execution role ARN for EMR on EKS"
+  value       = module.eks_blueprints.emr_on_eks_role_arn
+}
+
+output "emr_on_eks_role_id" {
+  description = "IAM execution role ID for EMR on EKS"
+  value       = module.eks_blueprints.emr_on_eks_role_id
+}
+
