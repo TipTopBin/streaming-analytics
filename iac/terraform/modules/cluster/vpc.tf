@@ -7,6 +7,7 @@ locals {
 
   private_subnet_ids        = length(module.aws_vpc.private_subnets) > 0 ? slice(module.aws_vpc.private_subnets, 0, 3) : []
   primary_private_subnet_id = length(module.aws_vpc.private_subnets) > 0 ? slice(module.aws_vpc.private_subnets, 0, 1) : []
+  pod_subnet_ids            = length(module.aws_vpc.private_subnets) > 0 ? slice(module.aws_vpc.private_subnets, 3, 6) : []
 }
 
 module "aws_vpc" {
