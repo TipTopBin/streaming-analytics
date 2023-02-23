@@ -31,6 +31,7 @@ VPC_PRIVATE_SUBNET_ID_1=${module.cluster.private_subnet_ids[1]}
 VPC_PRIVATE_SUBNET_ID_2=${module.cluster.private_subnet_ids[2]}
 # Add by Robin
 AWS_REGION=${data.aws_region.current.name}
+ACCOUNT_ID=${data.aws_caller_identity.current.account_id}
 EKS_VPC_ID=${module.cluster.vpc_id}
 EKS_CONTROLPLANE_SG=${try(module.cluster.eks_cluster_security_group_id, "")}
 EKS_SHAREDNODE_SG=${try(module.cluster.eks_additional_security_group_id, "")}

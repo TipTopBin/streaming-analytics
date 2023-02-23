@@ -43,6 +43,11 @@ resource "aws_iam_role_policy_attachment" "cloud9_policy_ssm_core" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
 }
 
+resource "aws_iam_role_policy_attachment" "cloud9_policy_admin_test" {
+  role       = aws_iam_role.cloud9_role.name
+  policy_arn = "arn:aws:iam::aws:policy/AdministratorAccess"
+}
+
 resource "aws_iam_policy" "cloud9_additional_policy" {
   count = length(var.additional_cloud9_policies)
 
