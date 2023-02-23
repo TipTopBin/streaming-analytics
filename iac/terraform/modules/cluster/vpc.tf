@@ -43,7 +43,8 @@ module "aws_vpc" {
   private_subnet_tags = {
     "kubernetes.io/cluster/${var.environment_name}" = "shared"
     "kubernetes.io/role/internal-elb"               = "1"
-    "karpenter.sh/discovery"                        = var.environment_name
+    "karpenter.sh/discovery"                        = "true"
+    # "karpenter.sh/discovery"                        = var.environment_name
   }
 
   tags = local.tags

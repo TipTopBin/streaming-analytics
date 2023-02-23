@@ -94,6 +94,7 @@ module "eks_blueprints" {
   managed_node_groups = {
     mg_5 = {
       node_group_name = "managed-ondemand"
+      iam_role_arn    = aws_iam_role.eks_node_role.arn
       instance_types  = ["m5.xlarge"]
       subnet_ids      = local.private_subnet_ids
       min_size        = local.default_mng_min
@@ -111,6 +112,7 @@ module "eks_blueprints" {
 
     system = {
       node_group_name = "managed-system"
+      iam_role_arn    = aws_iam_role.eks_node_role.arn
       instance_types  = ["m5.xlarge"]
       subnet_ids      = local.primary_private_subnet_id
       min_size        = 1
@@ -130,6 +132,7 @@ module "eks_blueprints" {
 
     mg_tainted = {
       node_group_name = "managed-ondemand-tainted"
+      iam_role_arn    = aws_iam_role.eks_node_role.arn
       instance_types  = ["m5.large"]
       subnet_ids      = local.private_subnet_ids
       min_size        = 0
@@ -264,4 +267,43 @@ resource "null_resource" "kubectl_set_env" {
       sleep 10
     EOT
   }
+}
+
+
+resource "aws_iam_role" "eks_node_role" {
+  name = "eks-node-role"
+
+  assume_role_policy = <<POLICY
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Principal": {
+        "Service": "ec2.amazonaws.com"
+      },
+      "Action": "sts:AssumeRole"
+    }
+  ]
+}
+POLICY
+}
+
+# Only for test
+resource "aws_iam_role_policy_attachment" "eks_node_role_admin" {
+  policy_arn = "arn:aws:iam::aws:policy/AdministratorAccess"
+  role       = aws_iam_role.eks_node_role.name
+}
+
+
+resource "aws_iam_instance_profile" "eks_node_instance_profile" {
+  name = "eks-node-instance-profile"
+  role = aws_iam_role.eks_node_role.name
+  path = "/"
+
+  lifecycle {
+    create_before_destroy = true
+  }
+
+  tags = local.tags
 }
