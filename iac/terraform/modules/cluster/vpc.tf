@@ -110,14 +110,14 @@ resource "aws_route" "private_subnet_nat_gateway_az1_1" {
   route_table_id            = tolist(data.aws_route_tables.private_route_table_az1.ids)[0]
   destination_cidr_block    = "0.0.0.0/0"
   nat_gateway_id            = "${aws_nat_gateway.nat_gateway_01.id}"
-  depends_on = [module.aws_vpc]
+  depends_on = [module.aws_vpc, aws_nat_gateway.nat_gateway_01, aws_nat_gateway.nat_gateway_02, aws_nat_gateway.nat_gateway_03]
 }
 
 resource "aws_route" "private_subnet_nat_gateway_az1_2" {
   route_table_id            = tolist(data.aws_route_tables.private_route_table_az1.ids)[1]
   destination_cidr_block    = "0.0.0.0/0"
   nat_gateway_id            = "${aws_nat_gateway.nat_gateway_01.id}"
-  depends_on = [module.aws_vpc]
+  depends_on = [module.aws_vpc, aws_nat_gateway.nat_gateway_01, aws_nat_gateway.nat_gateway_02, aws_nat_gateway.nat_gateway_03]
 }
 
 
@@ -137,7 +137,7 @@ resource "aws_route" "private_subnet_nat_gateway_az2_1" {
   destination_cidr_block    = "0.0.0.0/0"
   nat_gateway_id            = "${aws_nat_gateway.nat_gateway_02.id}"
   
-  depends_on = [module.aws_vpc]
+  depends_on = [module.aws_vpc, aws_nat_gateway.nat_gateway_01, aws_nat_gateway.nat_gateway_02, aws_nat_gateway.nat_gateway_03]
 }
 
 resource "aws_route" "private_subnet_nat_gateway_az2_2" {
@@ -145,7 +145,7 @@ resource "aws_route" "private_subnet_nat_gateway_az2_2" {
   destination_cidr_block    = "0.0.0.0/0"
   nat_gateway_id            = "${aws_nat_gateway.nat_gateway_02.id}"
   
-  depends_on = [module.aws_vpc]
+  depends_on = [module.aws_vpc, aws_nat_gateway.nat_gateway_01, aws_nat_gateway.nat_gateway_02, aws_nat_gateway.nat_gateway_03]
 }
 
 
@@ -165,7 +165,7 @@ resource "aws_route" "private_subnet_nat_gateway_az3_1" {
   destination_cidr_block    = "0.0.0.0/0"
   nat_gateway_id            = "${aws_nat_gateway.nat_gateway_03.id}"
   
-  depends_on = [module.aws_vpc]
+  depends_on = [module.aws_vpc, aws_nat_gateway.nat_gateway_01, aws_nat_gateway.nat_gateway_02, aws_nat_gateway.nat_gateway_03]
 }
 
 resource "aws_route" "private_subnet_nat_gateway_az3_2" {
@@ -173,7 +173,7 @@ resource "aws_route" "private_subnet_nat_gateway_az3_2" {
   destination_cidr_block    = "0.0.0.0/0"
   nat_gateway_id            = "${aws_nat_gateway.nat_gateway_03.id}"
   
-  depends_on = [module.aws_vpc]
+  depends_on = [module.aws_vpc, aws_nat_gateway.nat_gateway_01, aws_nat_gateway.nat_gateway_02, aws_nat_gateway.nat_gateway_03]
 }
 
 
