@@ -18,10 +18,10 @@ output "eks_cluster_nodegroup_name" {
   value       = module.eks_blueprints.managed_node_groups_id[0]
 }
 
-output "eks_cluster_tainted_nodegroup_name" {
-  description = "Amazon EKS Cluster tainted node group name"
-  value       = module.eks_blueprints.managed_node_groups_id[1]
-}
+# output "eks_cluster_tainted_nodegroup_name" {
+#   description = "Amazon EKS Cluster tainted node group name"
+#   value       = module.eks_blueprints.managed_node_groups_id[1]
+# }
 
 output "eks_cluster_nodegroup_size_min" {
   description = "Amazon EKS Cluster node group min size"
