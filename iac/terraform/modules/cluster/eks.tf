@@ -94,7 +94,9 @@ module "eks_blueprints" {
   managed_node_groups = {
     mg_5 = {
       node_group_name = "managed-ondemand"
-      iam_role_arn    = aws_iam_role.eks_node_role.arn
+      # IAM Roles for Nodegroup
+      create_iam_role = false
+      iam_role_arn    = aws_iam_role.eks_node_role.arn # iam_role_arn will be used if create_iam_role=false  
       instance_types  = ["m5.xlarge"]
       subnet_ids      = local.private_subnet_ids
       min_size        = local.default_mng_min
@@ -110,6 +112,15 @@ module "eks_blueprints" {
       }
     }
 
+    # # List of map_roles
+    # map_roles          = [
+    #   {
+    #     rolearn  = "arn:aws:iam::<aws-account-id>:role/<role-name>"     # The ARN of the IAM role
+    #     username = "karpenter-role"                                           # The user name within Kubernetes to map to the IAM role
+    #     groups   = ["system:masters"]                                   # A list of groups within Kubernetes to which the role is mapped; Checkout K8s Role and Rolebindings
+    #   }
+    # ]
+  
     # system = {
     #   node_group_name = "managed-system"
     #   iam_role_arn    = aws_iam_role.eks_node_role.arn
