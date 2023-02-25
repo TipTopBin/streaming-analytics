@@ -64,7 +64,20 @@ echo "==============================================="
 echo "  Install c9 to open files in cloud9 ......"
 echo "==============================================="
 npm install -g c9
-# example  c9 open ~/package.json
+
+
+echo "==============================================="
+echo "  Install flink ......"
+echo "==============================================="
+wget https://archive.apache.org/dist/flink/flink-1.15.3/flink-1.15.3-bin-scala_2.12.tgz
+sudo tar xzvf flink-*.tgz -C /opt
+sudo chown -R ec2-user /opt/flink-1.15.3
+cat >> ~/.bashrc <<EOF
+export PATH="/opt/flink-1.15.3/bin:$PATH"
+EOF
+source ~/.bashrc
+flink -v
+
 
 echo "==============================================="
 echo "  More Aliases ......"
