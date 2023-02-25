@@ -90,6 +90,7 @@ module "eks_blueprints" {
   # Add karpenter.sh/discovery tag so that we can use this as securityGroupSelector in karpenter provisioner
   node_security_group_tags = {
     "karpenter.sh/discovery" = var.environment_name
+    # "karpenter.sh/discovery" = var.environment_name
   }
 
   managed_node_groups = {
