@@ -16,9 +16,11 @@ variable "karpenter_version" {
 }
 
 variable "ami_release_version" {
+  # https://github.com/awslabs/amazon-eks-ami/releases
   description = "Default EKS AMI release version for node groups"
   type        = string
-  default     = "1.24.9-20230203"
+  default     = "1.25.6-20230217"
+  # default     = "1.24.9-20230203"
   # default     = "1.23.9-20221027"
 }
 

@@ -110,25 +110,25 @@ module "eks_blueprints" {
       }
     }
 
-    system = {
-      node_group_name = "managed-system"
-      iam_role_arn    = aws_iam_role.eks_node_role.arn
-      instance_types  = ["m5.xlarge"]
-      subnet_ids      = local.primary_private_subnet_id
-      min_size        = 1
-      max_size        = 2
-      desired_size    = 1
+    # system = {
+    #   node_group_name = "managed-system"
+    #   iam_role_arn    = aws_iam_role.eks_node_role.arn
+    #   instance_types  = ["m5.xlarge"]
+    #   subnet_ids      = local.primary_private_subnet_id
+    #   min_size        = 1
+    #   max_size        = 2
+    #   desired_size    = 1
 
-      ami_type        = "AL2_x86_64"
-      release_version = var.ami_release_version
+    #   ami_type        = "AL2_x86_64"
+    #   release_version = var.ami_release_version
 
-      k8s_taints = [{ key = "systemComponent", value = "true", effect = "NO_SCHEDULE" }]
+    #   k8s_taints = [{ key = "systemComponent", value = "true", effect = "NO_SCHEDULE" }]
 
-      k8s_labels = {
-        workshop-system = "yes"
-        blocker         = sha1(aws_eks_addon.vpc_cni.id)
-      }
-    }
+    #   k8s_labels = {
+    #     workshop-system = "yes"
+    #     blocker         = sha1(aws_eks_addon.vpc_cni.id)
+    #   }
+    # }
 
     mg_tainted = {
       node_group_name = "managed-ondemand-tainted"
