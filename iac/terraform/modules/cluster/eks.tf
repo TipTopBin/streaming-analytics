@@ -103,8 +103,8 @@ module "eks_blueprints" {
   }
 
   managed_node_groups = {
-    mg_5 = {
-      node_group_name = "managed-ondemand"
+    mg_x86 = {
+      node_group_name = "managed-ondemand-x86"
       # IAM Roles for Nodegroup
       create_iam_role = false
       iam_role_arn    = aws_iam_role.eks_node_role.arn # iam_role_arn will be used if create_iam_role=false  
@@ -132,46 +132,49 @@ module "eks_blueprints" {
     #   }
     # ]
   
-    system = {
-      node_group_name = "managed-system"
-      create_iam_role = false
+    mg_arm = {
+      node_group_name = "managed-ondemand-arm"
       iam_role_arn    = aws_iam_role.eks_node_role.arn
-      instance_types  = ["m5.xlarge"]
-      subnet_ids      = local.primary_private_subnet_id
+      instance_types  = ["m6g.2xlarge"]
+      subnet_ids      = local.private_subnet_ids
       min_size        = 1
       max_size        = 2
       desired_size    = 1
 
-      ami_type        = "AL2_x86_64"
+
+      ami_type        = "AL2_ARM_64" #https://registry.terraform.io/modules/terraform-aws-modules/eks/aws/latest/submodules/eks-managed-node-group
       release_version = var.ami_release_version
 
-      # k8s_taints = [{ key = "systemComponent", value = "true", effect = "NO_SCHEDULE" }]
+      k8s_taints = [{ key = "cpu-arch", value = "arm64", effect = "NO_SCHEDULE" }]
 
       k8s_labels = {
-        workshop-system = "yes"
-        # blocker         = sha1(aws_eks_addon.vpc_cni.id)
+        workshop-default = "no"
+        # blocker          = sha1(aws_eks_addon.vpc_cni.id)
+        tainted          = "yes"
       }
     }
-
-    # mg_tainted = {
-    #   node_group_name = "managed-ondemand-tainted"
+    
+    # system = {
+    #   node_group_name = "managed-system"
+    #   create_iam_role = false
     #   iam_role_arn    = aws_iam_role.eks_node_role.arn
-    #   instance_types  = ["m5.large"]
-    #   subnet_ids      = local.private_subnet_ids
-    #   min_size        = 0
-    #   max_size        = 1
-    #   desired_size    = 0
-
+    #   instance_types  = ["m5.xlarge"]
+    #   subnet_ids      = local.primary_private_subnet_id
+    #   min_size        = 1
+    #   max_size        = 2
+    #   desired_size    = 1
 
     #   ami_type        = "AL2_x86_64"
     #   release_version = var.ami_release_version
 
+    #   # k8s_taints = [{ key = "systemComponent", value = "true", effect = "NO_SCHEDULE" }]
+
     #   k8s_labels = {
-    #     workshop-default = "no"
-    #     blocker          = sha1(aws_eks_addon.vpc_cni.id)
-    #     tainted          = "yes"
+    #     workshop-system = "yes"
+    #     # blocker         = sha1(aws_eks_addon.vpc_cni.id)
     #   }
     # }
+
   }
 
   # fargate_profiles = {
