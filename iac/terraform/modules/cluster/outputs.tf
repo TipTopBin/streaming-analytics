@@ -197,3 +197,18 @@ output "eks_external_sg_id" {
   description = "EKS External Security Group ID"
   value       = module.external_sg.security_group_id
 }
+
+output "eks_node_role_arn" {
+  description = "EKS node role ARN"
+  value       = aws_iam_role.eks_node_role.arn
+}
+
+output "eks_node_role_id" {
+  description = "IEKS node role ID"
+  value       = aws_iam_role.eks_node_role.id
+}
+
+output "eks_node_role_profile" {
+  description = "EKS node role profile"
+  value       = aws_iam_instance_profile.eks_node_instance_profile.arn
+}
