@@ -286,6 +286,7 @@ echo "alias tf='terraform'" >> ~/.bashrc
 echo "alias tfi='terraform init'" >> ~/.bashrc
 echo "alias tfp='terraform plan -out tfplan'" >> ~/.bashrc
 echo "alias tfa='terraform apply'" >> ~/.bashrc # terraform apply tfplan
+echo "alias tfay='terraform apply --auto-approve'" >> ~/.bashrc # terraform apply tfplan
 source ~/.bashrc
 terraform --version
 
