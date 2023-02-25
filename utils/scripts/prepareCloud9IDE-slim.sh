@@ -60,6 +60,11 @@ chmod 700 get_helm.sh
 helm version
 helm repo add stable https://charts.helm.sh/stable
 
+echo "==============================================="
+echo "  Install c9 to open files in cloud9 ......"
+echo "==============================================="
+npm install -g c9
+# example  c9 open ~/package.json
 
 echo "==============================================="
 echo "  More Aliases ......"
