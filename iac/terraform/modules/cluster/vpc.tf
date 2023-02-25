@@ -208,16 +208,16 @@ module "external_sg" {
       cidr_blocks = "0.0.0.0/0"
     },
     {
-      from_port   = -1
-      to_port     = -1
-      protocol    = "tcp"
+      from_port   = 0
+      to_port     = 0
+      protocol    = "-1"
       description = "All internal traffic"
       cidr_blocks = local.vpc_cidr
     },
     {
-      from_port   = -1
-      to_port     = -1
-      protocol    = "tcp"
+      from_port   = 0
+      to_port     = 0
+      protocol    = "-1"
       description = "All pod traffic"
       cidr_blocks = local.secondary_vpc_cidr
     }    
