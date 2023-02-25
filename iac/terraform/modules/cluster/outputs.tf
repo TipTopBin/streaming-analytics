@@ -210,5 +210,5 @@ output "eks_node_role_id" {
 
 output "eks_node_role_profile" {
   description = "EKS node role profile"
-  value       = aws_iam_instance_profile.eks_node_instance_profile.arn
+  value       = aws_iam_instance_profile.eks_node_instance_profile.name
 }
