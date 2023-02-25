@@ -190,3 +190,39 @@ resource "aws_vpc_endpoint" "s3" {
   
   depends_on = [module.aws_vpc]
 }
+
+
+module "external_sg" {
+  source = "terraform-aws-modules/security-group/aws"
+
+  name        = "eks-external-sg"
+  description = "Security group for external"
+  vpc_id      = module.aws_vpc.vpc_id
+
+  ingress_with_cidr_blocks = [
+    {
+      from_port   = 8081
+      to_port     = 8081
+      protocol    = "tcp"
+      description = "Flink UI ports"
+      cidr_blocks = "0.0.0.0/0"
+    },
+    {
+      from_port   = -1
+      to_port     = -1
+      protocol    = "tcp"
+      description = "All internal traffic"
+      cidr_blocks = local.vpc_cidr
+    },
+    {
+      from_port   = -1
+      to_port     = -1
+      protocol    = "tcp"
+      description = "All pod traffic"
+      cidr_blocks = local.secondary_vpc_cidr
+    }    
+  ]
+  
+  depends_on = [module.aws_vpc]
+
+}

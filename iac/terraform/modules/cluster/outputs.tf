@@ -193,3 +193,7 @@ output "emr_on_eks_role_id" {
   value       = module.eks_blueprints.emr_on_eks_role_id
 }
 
+output "eks_external_sg_id" {
+  description = "EKS External Security Group ID"
+  value       = module.external_sg.security_group_id
+}

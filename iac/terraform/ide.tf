@@ -45,6 +45,7 @@ EMR_VIRTUAL_CLUSTER_NAME=${module.cluster.emr_eks_spark_name}
 EMR_VIRTUAL_CLUSTER_ID=${split("/", module.cluster.emr_eks_spark_arn)[2]}
 EMR_VIRTUAL_CLUSTER_ARN=${module.cluster.emr_eks_spark_arn}
 EMR_EKS_EXECUTION_ARN=${module.cluster.emr_on_eks_role_arn[0]}
+EKS_EXTERNAL_SG=${module.cluster.eks_external_sg_id}
 EOT
 
   bootstrap_script = <<EOF
