@@ -1,6 +1,6 @@
 FROM maven:3.8.6-jdk-8-slim AS builder
 COPY src/ /home/app/src
-COPY pom_113.xml /home/app/pom.xml
+COPY pom.xml /home/app/pom.xml
 RUN ls -l /home/app
 RUN mvn -f /home/app/pom.xml clean package -Dflink.version=1.13.2
 
