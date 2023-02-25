@@ -2,6 +2,7 @@ locals {
   default_mng_min  = 1
   default_mng_max  = 6
   default_mng_size = 1
+  eks_node_policies = ["AmazonEC2ContainerRegistryReadOnly", "AmazonEKSWorkerNodePolicy", "AmazonEKS_CNI_Policy", "AmazonSSMManagedInstanceCore"]
 }
 
 module "eks_blueprints" {
@@ -298,6 +299,13 @@ resource "aws_iam_role" "eks_node_role" {
   ]
 }
 POLICY
+}
+
+resource "aws_iam_role_policy_attachment" "eks_node_role_managed" {
+  for_each = toset(local.eks_node_policies)
+
+  policy_arn = "arn:aws:iam::aws:policy/${each.value}"
+  role       = aws_iam_role.eks_node_role.name
 }
 
 # Only for test
