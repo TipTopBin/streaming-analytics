@@ -205,7 +205,8 @@ module "external_sg" {
       to_port     = 8081
       protocol    = "tcp"
       description = "Flink UI ports"
-      cidr_blocks = "0.0.0.0/0"
+      cidr_blocks = local.vpc_cidr # update manually
+      # cidr_blocks = "0.0.0.0/0"
     },
     {
       from_port   = 0
