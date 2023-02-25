@@ -6,7 +6,13 @@ variable "environment_name" {
 variable "cluster_version" {
   type        = string
   description = "EKS cluster version"
-  default     = "1.24"
+  default     = "1.25"
+}
+
+variable "karpenter_version" {
+  type        = string
+  description = "Karpenter version"
+  default     = "v0.25.0"
 }
 
 variable "ami_release_version" {

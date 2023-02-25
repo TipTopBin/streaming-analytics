@@ -55,7 +55,7 @@ resource "helm_release" "karpenter" {
   # repository_username = local.ecr_pub_username
   # repository_password = local.ecr_pub_password
   chart               = "karpenter"
-  version             = local.karpenter_version
+  version             = var.karpenter_version
 
   set {
     name  = "settings.aws.clusterName"
