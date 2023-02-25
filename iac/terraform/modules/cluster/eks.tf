@@ -130,25 +130,25 @@ module "eks_blueprints" {
     #   }
     # }
 
-    mg_tainted = {
-      node_group_name = "managed-ondemand-tainted"
-      iam_role_arn    = aws_iam_role.eks_node_role.arn
-      instance_types  = ["m5.large"]
-      subnet_ids      = local.private_subnet_ids
-      min_size        = 0
-      max_size        = 1
-      desired_size    = 0
+    # mg_tainted = {
+    #   node_group_name = "managed-ondemand-tainted"
+    #   iam_role_arn    = aws_iam_role.eks_node_role.arn
+    #   instance_types  = ["m5.large"]
+    #   subnet_ids      = local.private_subnet_ids
+    #   min_size        = 0
+    #   max_size        = 1
+    #   desired_size    = 0
 
 
-      ami_type        = "AL2_x86_64"
-      release_version = var.ami_release_version
+    #   ami_type        = "AL2_x86_64"
+    #   release_version = var.ami_release_version
 
-      k8s_labels = {
-        workshop-default = "no"
-        blocker          = sha1(aws_eks_addon.vpc_cni.id)
-        tainted          = "yes"
-      }
-    }
+    #   k8s_labels = {
+    #     workshop-default = "no"
+    #     blocker          = sha1(aws_eks_addon.vpc_cni.id)
+    #     tainted          = "yes"
+    #   }
+    # }
   }
 
   # fargate_profiles = {
