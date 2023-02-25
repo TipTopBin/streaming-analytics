@@ -61,6 +61,12 @@ helm version
 helm repo add stable https://charts.helm.sh/stable
 
 echo "==============================================="
+echo "  Install k9s a Kubernetes CLI To Manage Your Clusters In Style ......"
+echo "==============================================="
+curl -sS https://webinstall.dev/k9s | bash
+
+
+echo "==============================================="
 echo "  Install c9 to open files in cloud9 ......"
 echo "==============================================="
 npm install -g c9
