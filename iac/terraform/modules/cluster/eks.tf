@@ -86,14 +86,14 @@ module "eks_blueprints" {
       source_cluster_security_group = true
     }
     
-    ingress_external_security_group_id = {
-      description              = "Ingress from external sg"
-      protocol                 = "-1"
-      from_port                = 0
-      to_port                  = 0
-      type                     = "ingress"
-      source_security_group_id = module.external_sg.security_group_id
-    }    
+    # ingress_external_security_group_id = {
+    #   description              = "Ingress from external sg"
+    #   protocol                 = "-1"
+    #   from_port                = 0
+    #   to_port                  = 0
+    #   type                     = "ingress"
+    #   source_security_group_id = module.external_sg.security_group_id
+    # }    
   }
 
   # Add karpenter.sh/discovery tag so that we can use this as securityGroupSelector in karpenter provisioner
@@ -108,7 +108,7 @@ module "eks_blueprints" {
       # IAM Roles for Nodegroup
       create_iam_role = false
       iam_role_arn    = aws_iam_role.eks_node_role.arn # iam_role_arn will be used if create_iam_role=false  
-      instance_types  = ["m5.xlarge"]
+      instance_types  = ["m5.2xlarge"]
       subnet_ids      = local.private_subnet_ids
       min_size        = local.default_mng_min
       max_size        = local.default_mng_max
@@ -132,25 +132,26 @@ module "eks_blueprints" {
     #   }
     # ]
   
-    # system = {
-    #   node_group_name = "managed-system"
-    #   iam_role_arn    = aws_iam_role.eks_node_role.arn
-    #   instance_types  = ["m5.xlarge"]
-    #   subnet_ids      = local.primary_private_subnet_id
-    #   min_size        = 1
-    #   max_size        = 2
-    #   desired_size    = 1
+    system = {
+      node_group_name = "managed-system"
+      create_iam_role = false
+      iam_role_arn    = aws_iam_role.eks_node_role.arn
+      instance_types  = ["m5.xlarge"]
+      subnet_ids      = local.primary_private_subnet_id
+      min_size        = 1
+      max_size        = 2
+      desired_size    = 1
 
-    #   ami_type        = "AL2_x86_64"
-    #   release_version = var.ami_release_version
+      ami_type        = "AL2_x86_64"
+      release_version = var.ami_release_version
 
-    #   k8s_taints = [{ key = "systemComponent", value = "true", effect = "NO_SCHEDULE" }]
+      # k8s_taints = [{ key = "systemComponent", value = "true", effect = "NO_SCHEDULE" }]
 
-    #   k8s_labels = {
-    #     workshop-system = "yes"
-    #     blocker         = sha1(aws_eks_addon.vpc_cni.id)
-    #   }
-    # }
+      k8s_labels = {
+        workshop-system = "yes"
+        # blocker         = sha1(aws_eks_addon.vpc_cni.id)
+      }
+    }
 
     # mg_tainted = {
     #   node_group_name = "managed-ondemand-tainted"
