@@ -134,6 +134,7 @@ module "eks_blueprints" {
   
     mg_arm = {
       node_group_name = "managed-ondemand-arm"
+      create_iam_role = false
       iam_role_arn    = aws_iam_role.eks_node_role.arn
       instance_types  = ["m6g.2xlarge"]
       subnet_ids      = local.private_subnet_ids
