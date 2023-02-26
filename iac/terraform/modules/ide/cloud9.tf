@@ -2,7 +2,7 @@ resource "aws_cloud9_environment_ec2" "c9_workspace" {
   instance_type               = var.instance_type
   # name                        = var.environment_name
   name                        = var.cloud9_env_name
-  automatic_stop_time_minutes = 120
+  automatic_stop_time_minutes = 10080 # 7days
   image_id                    = "amazonlinux-2-x86_64"
   subnet_id                   = var.subnet_id
   owner_arn                   = var.cloud9_owner
