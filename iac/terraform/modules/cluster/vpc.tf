@@ -104,6 +104,7 @@ data "aws_route_tables" "private_route_table_az1" {
     values = ["*private-${module.aws_vpc.azs[0]}"]
   }
   
+  depends_on = [module.aws_vpc, aws_nat_gateway.nat_gateway_01, aws_nat_gateway.nat_gateway_02, aws_nat_gateway.nat_gateway_03]
 }
 
 resource "aws_route" "private_subnet_nat_gateway_az1_1" {
@@ -129,7 +130,8 @@ data "aws_route_tables" "private_route_table_az2" {
     values = ["*private-${module.aws_vpc.azs[1]}"]
   }
 
-  depends_on = [module.aws_vpc]
+
+  depends_on = [module.aws_vpc, aws_nat_gateway.nat_gateway_01, aws_nat_gateway.nat_gateway_02, aws_nat_gateway.nat_gateway_03]
 }
 
 resource "aws_route" "private_subnet_nat_gateway_az2_1" {
@@ -157,7 +159,7 @@ data "aws_route_tables" "private_route_table_az3" {
     values = ["*private-${module.aws_vpc.azs[2]}"]
   }
 
-  depends_on = [module.aws_vpc]
+  depends_on = [module.aws_vpc, aws_nat_gateway.nat_gateway_01, aws_nat_gateway.nat_gateway_02, aws_nat_gateway.nat_gateway_03]
 }
 
 resource "aws_route" "private_subnet_nat_gateway_az3_1" {
@@ -180,7 +182,7 @@ resource "aws_route" "private_subnet_nat_gateway_az3_2" {
 data "aws_route_tables" "rtb_all" {
   vpc_id = module.aws_vpc.vpc_id
   
-  depends_on = [module.aws_vpc]
+  depends_on = [module.aws_vpc, aws_nat_gateway.nat_gateway_01, aws_nat_gateway.nat_gateway_02, aws_nat_gateway.nat_gateway_03]
 }
 
 resource "aws_vpc_endpoint" "s3" {
@@ -225,5 +227,4 @@ module "external_sg" {
   ]
   
   depends_on = [module.aws_vpc]
-
 }
