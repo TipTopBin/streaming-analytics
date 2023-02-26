@@ -10,6 +10,12 @@ locals {
   pod_subnet_ids            = length(module.aws_vpc.private_subnets) > 0 ? slice(module.aws_vpc.private_subnets, 3, 6) : []
 }
 
+data "aws_region" "current" {}
+
+data "aws_availability_zones" "available" {}
+
+data "aws_caller_identity" "current" {}
+
 module "aws_vpc" {
   source  = "terraform-aws-modules/vpc/aws"
   version = "~> 3.0"

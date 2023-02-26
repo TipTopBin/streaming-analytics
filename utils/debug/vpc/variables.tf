@@ -1,6 +1,7 @@
 variable "environment_name" {
   type        = string
   description = "Workshop environment name"
+  default     = "debug"
 }
 
 variable "cluster_version" {
