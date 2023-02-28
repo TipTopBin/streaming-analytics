@@ -6,7 +6,7 @@ locals {
 }
 
 module "eks_blueprints" {
-  source = "github.com/aws-ia/terraform-aws-eks-blueprints?ref=v4.16.0"
+  source = "github.com/aws-ia/terraform-aws-eks-blueprints?ref=v4.25.0"
 
   tags = local.tags
 
@@ -109,42 +109,58 @@ module "eks_blueprints" {
       create_iam_role = false
       iam_role_arn    = aws_iam_role.eks_node_role.arn # iam_role_arn will be used if create_iam_role=false  
       instance_types  = ["m5.2xlarge"]
+      disk_size = 100
+      disk_type = "gp3"
+
       subnet_ids      = local.private_subnet_ids
       min_size        = local.default_mng_min
       max_size        = local.default_mng_max
       desired_size    = local.default_mng_size
 
       ami_type        = "AL2_x86_64"
-      release_version = var.ami_release_version
+      # release_version = var.ami_release_version
+
+      # create_launch_template = true
+      # launch_template_os     = "amazonlinux2eks"
+
+      update_config = [{
+        max_unavailable_percentage = 30
+      }]
 
       k8s_labels = {
         workshop-default = "yes"
         blocker          = sha1(aws_eks_addon.vpc_cni.id)
+        Environment   = "preprod"
+        Zone          = "test"
+        WorkerType    = "ON_DEMAND"
+        NodeGroupType = "core"        
       }
-    }
 
-    # # List of map_roles
-    # map_roles          = [
-    #   {
-    #     rolearn  = "arn:aws:iam::<aws-account-id>:role/<role-name>"     # The ARN of the IAM role
-    #     username = "karpenter-role"                                           # The user name within Kubernetes to map to the IAM role
-    #     groups   = ["system:masters"]                                   # A list of groups within Kubernetes to which the role is mapped; Checkout K8s Role and Rolebindings
-    #   }
-    # ]
+      additional_tags = {
+        Name                                                             = "core-node-x86"
+        subnet_type                                                      = "private"
+      }      
+    }
   
     mg_arm = {
       node_group_name = "managed-ondemand-arm"
       create_iam_role = false
       iam_role_arn    = aws_iam_role.eks_node_role.arn
       instance_types  = ["m6g.2xlarge"]
+      disk_size = 100
+      disk_type = "gp3"
+
       subnet_ids      = local.private_subnet_ids
       min_size        = 1
       max_size        = 2
       desired_size    = 1
 
-
       ami_type        = "AL2_ARM_64" #https://registry.terraform.io/modules/terraform-aws-modules/eks/aws/latest/submodules/eks-managed-node-group
-      release_version = var.ami_release_version
+      # release_version = var.ami_release_version
+
+      update_config = [{
+        max_unavailable_percentage = 30
+      }]
 
       k8s_taints = [{ key = "cpu-arch", value = "arm64", effect = "NO_SCHEDULE" }]
 
@@ -153,45 +169,33 @@ module "eks_blueprints" {
         # blocker          = sha1(aws_eks_addon.vpc_cni.id)
         tainted          = "yes"
       }
+
+      additional_tags = {
+        Name                                                             = "core-node-arm"
+        subnet_type                                                      = "private"
+      }            
     }
-    
-    # system = {
-    #   node_group_name = "managed-system"
-    #   create_iam_role = false
-    #   iam_role_arn    = aws_iam_role.eks_node_role.arn
-    #   instance_types  = ["m5.xlarge"]
-    #   subnet_ids      = local.primary_private_subnet_id
-    #   min_size        = 1
-    #   max_size        = 2
-    #   desired_size    = 1
-
-    #   ami_type        = "AL2_x86_64"
-    #   release_version = var.ami_release_version
-
-    #   # k8s_taints = [{ key = "systemComponent", value = "true", effect = "NO_SCHEDULE" }]
-
-    #   k8s_labels = {
-    #     workshop-system = "yes"
-    #     # blocker         = sha1(aws_eks_addon.vpc_cni.id)
-    #   }
-    # }
 
   }
 
-  # fargate_profiles = {
-  #   checkout_profile = {
-  #     fargate_profile_name = "checkout-profile"
-  #     fargate_profile_namespaces = [{
-  #       namespace = "checkout"
-  #       k8s_labels = {
-  #         fargate = "yes"
-  #       }
-  #     }]
-  #     subnet_ids = local.private_subnet_ids
+  # # List of map_roles
+  # map_roles          = [
+  #   {
+  #     rolearn  = "arn:aws:iam::<aws-account-id>:role/<role-name>"     # The ARN of the IAM role
+  #     username = "karpenter-role"                                           # The user name within Kubernetes to map to the IAM role
+  #     groups   = ["system:masters"]                                   # A list of groups within Kubernetes to which the role is mapped; Checkout K8s Role and Rolebindings
   #   }
-  # }
-  
-  
+  # ]
+
+
+  #---------------------------------------
+  # ENABLE EMR ON EKS
+  # 1. Creates namespace
+  # 2. k8s role and role binding(emr-containers user) for the above namespace
+  # 3. IAM role for the team execution role
+  # 4. Update AWS_AUTH config map with  emr-containers user and AWSServiceRoleForAmazonEMRContainers role
+  # 5. Create a trust relationship between the job execution role and the identity of the EMR managed service account
+  #---------------------------------------  
   enable_emr_on_eks = true
   
   emr_on_eks_teams = {
@@ -209,25 +213,28 @@ module "eks_blueprints" {
     # }
   }
 
+  tags = local.tags
 }
 
-#---------------------------------------------------------------
-# Create EMR on EKS Virtual Cluster
-#---------------------------------------------------------------
-resource "aws_emrcontainers_virtual_cluster" "emr_eks_spark" {
-  name = format("%s-%s", module.eks_blueprints.eks_cluster_id, "emr-spark")
+# #---------------------------------------------------------------
+# # Create EMR on EKS Virtual Cluster
+# #---------------------------------------------------------------
+# resource "aws_emrcontainers_virtual_cluster" "emr_eks_spark" {
+#   name = format("%s-%s", module.eks_blueprints.eks_cluster_id, "emr-spark")
 
-  container_provider {
-    id   = module.eks_blueprints.eks_cluster_id
-    type = "EKS"
+#   container_provider {
+#     id   = module.eks_blueprints.eks_cluster_id
+#     type = "EKS"
 
-    info {
-      eks_info {
-        namespace = "emr-spark"
-      }
-    }
-  }
-}
+#     info {
+#       eks_info {
+#         namespace = "emr-spark"
+#       }
+#     }
+#   }
+
+
+# }
 
 resource "aws_security_group_rule" "dns_udp" {
   type              = "ingress"
