@@ -1,4 +1,5 @@
-FROM maven:3.8.6-jdk-8-slim AS builder
+# FROM maven:3.8.6-jdk-8-slim AS builder # 免费账户有速率限制
+FROM public.ecr.aws/docker/library/maven:3.8.6-amazoncorretto-11 AS builder 
 COPY src/ /home/app/src
 COPY pom.xml /home/app/
 RUN ls -l /home/app
