@@ -11,3 +11,15 @@
 
 2. installer.sh 
 文件内容修改需特别谨慎 
+
+
+3. Cloud9 权限问题
+
+```shell
+aws ec2 describe-iam-instance-profile-associations --filters Name=instance-id,Values=i-xxx
+```
+
+解绑：
+```shell
+aws ec2 disassociate-iam-instance-profile --association-id xxx
+```

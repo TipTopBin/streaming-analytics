@@ -174,14 +174,15 @@ output "oidc_provider" {
 
 output "emr_eks_spark_name" {
   description = "EMR Virtual Cluster Name for Spark"
-  value       = aws_emrcontainers_virtual_cluster.emr_eks_spark.name
+  value       = local.emr_spark_namespace
+  # value       = aws_emrcontainers_virtual_cluster.emr_eks_spark.name
   # value       =  format("%s-%s", module.eks_blueprints.eks_cluster_id, "emr-spark")
 }
 
-output "emr_eks_spark_arn" {
-  description = "EMR Virtual Cluster ARN for Spark"
-  value       =  aws_emrcontainers_virtual_cluster.emr_eks_spark.arn
-}
+# output "emr_eks_spark_arn" {
+#   description = "EMR Virtual Cluster ARN for Spark"
+#   value       =  aws_emrcontainers_virtual_cluster.emr_eks_spark.arn
+# }
 
 output "emr_on_eks_role_arn" {
   description = "IAM execution role ARN for EMR on EKS"

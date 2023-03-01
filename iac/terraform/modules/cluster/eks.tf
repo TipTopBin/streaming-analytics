@@ -3,6 +3,8 @@ locals {
   default_mng_max  = 6
   default_mng_size = 1
   eks_node_policies = ["AmazonEC2ContainerRegistryReadOnly", "AmazonEKSWorkerNodePolicy", "AmazonEKS_CNI_Policy", "AmazonSSMManagedInstanceCore"]
+  
+  emr_spark_namespace = "emr-spark"
 }
 
 module "eks_blueprints" {
@@ -200,7 +202,7 @@ module "eks_blueprints" {
   
   emr_on_eks_teams = {
     emr-eks-spark = {
-      namespace               = "emr-spark"
+      namespace               = local.emr_spark_namespace
       job_execution_role      = "emr-eks-spark"
       # Only add admin for debug usage
       additional_iam_policies = [aws_iam_policy.emr_on_eks.arn, "arn:aws:iam::aws:policy/AdministratorAccess"]
@@ -213,14 +215,13 @@ module "eks_blueprints" {
     # }
   }
 
-  tags = local.tags
 }
 
-# #---------------------------------------------------------------
-# # Create EMR on EKS Virtual Cluster
-# #---------------------------------------------------------------
+#---------------------------------------------------------------
+# Create EMR on EKS Virtual Cluster
+#---------------------------------------------------------------
 # resource "aws_emrcontainers_virtual_cluster" "emr_eks_spark" {
-#   name = format("%s-%s", module.eks_blueprints.eks_cluster_id, "emr-spark")
+#   name = format("%s-%s", module.eks_blueprints.eks_cluster_id, local.emr_spark_namespace)
 
 #   container_provider {
 #     id   = module.eks_blueprints.eks_cluster_id
@@ -228,12 +229,17 @@ module "eks_blueprints" {
 
 #     info {
 #       eks_info {
-#         namespace = "emr-spark"
+#         namespace = local.emr_spark_namespace
 #       }
 #     }
+    
 #   }
 
-
+#   depends_on = [
+#     module.eks_blueprints,
+#     aws_eks_addon.vpc_cni,
+#     kubectl_manifest.eni_config
+#   ]
 # }
 
 resource "aws_security_group_rule" "dns_udp" {
@@ -305,7 +311,7 @@ resource "null_resource" "kubectl_set_env" {
 
 
 resource "aws_iam_role" "eks_node_role" {
-  name = "eks-node-role"
+  name = format("eks-node-role-%s", var.environment_name)
 
   assume_role_policy = <<POLICY
 {

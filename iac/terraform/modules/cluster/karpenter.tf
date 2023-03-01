@@ -121,7 +121,7 @@ data "aws_iam_policy_document" "karpenter_policy" {
 }
 
 resource "aws_iam_policy" "karpenter" {
-  name        = "karpenter-policy"
+  name = format("karpenter-policy-%s", var.environment_name)
   path        = "/"
   description = "Accesses for karpenter controller"
   policy      = join("", data.aws_iam_policy_document.karpenter_policy.*.json)
