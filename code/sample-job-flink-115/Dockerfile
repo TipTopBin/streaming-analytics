@@ -5,7 +5,8 @@ COPY pom.xml /home/app/
 RUN ls -l /home/app
 RUN mvn -f /home/app/pom.xml clean package -Dflink.version=1.15.1
 
-FROM flink:1.15.1
+# FROM flink:1.15.1
+FROM public.ecr.aws/docker/library/flink:1.15.1-java11
 RUN mkdir -p $FLINK_HOME/usrlib
 COPY --from=builder /home/app/target/aws-kinesis-analytics-java-apps-1.0.jar $FLINK_HOME/usrlib/aws-kinesis-analytics-java-apps-1.0.jar
 RUN mkdir $FLINK_HOME/plugins/s3-fs-hadoop
