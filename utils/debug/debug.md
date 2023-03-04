@@ -23,3 +23,13 @@ aws ec2 describe-iam-instance-profile-associations --filters Name=instance-id,Va
 ```shell
 aws ec2 disassociate-iam-instance-profile --association-id xxx
 ```
+
+4. Karpenter
+
+Failed to get lease: leases.coordination.k8s.io "xxx.ap-south-1.compute.internal" not found
+- 检查权限
+    - k get cm aws-auth -n kube-system -o yaml   
+- 检查安全组
+  
+
+journalctl -xefu kubelet
