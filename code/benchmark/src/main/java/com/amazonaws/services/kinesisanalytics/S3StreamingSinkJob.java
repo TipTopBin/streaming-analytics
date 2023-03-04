@@ -79,7 +79,7 @@ public class S3StreamingSinkJob {
         }
 
         if (params.get("checkpointType") != null) {
-            checkpointType = params.get("checkpointType"));
+            checkpointType = params.get("checkpointType");
         }
 
         if (params.get("checkpointInterval") != null) {
