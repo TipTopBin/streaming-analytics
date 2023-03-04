@@ -378,7 +378,7 @@ flink -v
 echo "==============================================="
 echo "  Expand disk space ......"
 echo "==============================================="
-wget https://github.com/DATACNTOP/streaming-analytics/blob/main/utils/scripts/resize-ebs.sh -O /tmp/resize-ebs.sh
+wget https://raw.githubusercontent.com/DATACNTOP/streaming-analytics/main/utils/scripts/resize-ebs.sh -O /tmp/resize-ebs.sh
 chmod +x /tmp/resize-ebs.sh
 ./resize-ebs.sh 1000
 
