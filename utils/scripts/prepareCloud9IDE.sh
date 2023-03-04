@@ -388,7 +388,7 @@ echo "  Expand disk space ......"
 echo "==============================================="
 wget https://raw.githubusercontent.com/DATACNTOP/streaming-analytics/main/utils/scripts/resize-ebs.sh -O /tmp/resize-ebs.sh
 chmod +x /tmp/resize-ebs.sh
-./resize-ebs.sh 1000
+/tmp/resize-ebs.sh 1000
 
 
 echo "==============================================="
