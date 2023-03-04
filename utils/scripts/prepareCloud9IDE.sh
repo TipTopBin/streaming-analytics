@@ -127,7 +127,7 @@ cat >> ~/.bashrc <<EOF
 export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
 EOF
 source ~/.bashrc
-
+kubectl krew list
 
 # 安装 helm
 echo "==============================================="
