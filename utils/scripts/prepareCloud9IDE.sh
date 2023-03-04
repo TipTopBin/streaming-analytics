@@ -1,6 +1,3 @@
-# 参考
-# https://github.com/fmmasood/eks-cli-init-tools/blob/main/cli_tools.sh
-
 echo "==============================================="
 echo "  Config envs ......"
 echo "==============================================="
@@ -20,6 +17,17 @@ aws configure set region $AWS_REGION
 source ~/.bashrc
 aws sts get-caller-identity
 
+echo "==============================================="
+echo "  Config Cloud9 ......"
+echo "==============================================="
+aws cloud9 update-environment --environment-id $C9_PID --managed-credentials-action DISABLE
+rm -vf ${HOME}/.aws/credentials
+
+echo "==============================================="
+echo "  Install c9 to open files in cloud9 ......"
+echo "==============================================="
+npm install -g c9
+# example  c9 open ~/package.json
 
 echo "==============================================="
 echo "  Install eksctl ......"
@@ -39,7 +47,7 @@ source ~/.bashrc
 echo "==============================================="
 echo "  Install eks anywhere ......"
 echo "==============================================="
-export EKSA_RELEASE="0.10.1" OS="$(uname -s | tr A-Z a-z)" RELEASE_NUMBER=15
+export EKSA_RELEASE="0.14.3" OS="$(uname -s | tr A-Z a-z)" RELEASE_NUMBER=30
 curl "https://anywhere-assets.eks.amazonaws.com/releases/eks-a/${RELEASE_NUMBER}/artifacts/eks-a/v${EKSA_RELEASE}/${OS}/amd64/eksctl-anywhere-v${EKSA_RELEASE}-${OS}-amd64.tar.gz" \
     --silent --location \
     | tar xz ./eksctl-anywhere
@@ -73,13 +81,6 @@ complete -C '/usr/local/bin/aws_completer' aws
 EOF
 source ~/.bashrc
 aws --version
-
-
-echo "==============================================="
-echo "  Config Cloud9 ......"
-echo "==============================================="
-aws cloud9 update-environment --environment-id $C9_PID --managed-credentials-action DISABLE
-rm -vf ${HOME}/.aws/credentials
 
 
 echo "==============================================="
@@ -127,7 +128,10 @@ cat >> ~/.bashrc <<EOF
 export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
 EOF
 source ~/.bashrc
+kubectl krew install ctx # kubectx
+kubectl krew install ns # kubens
 kubectl krew list
+
 
 # 安装 helm
 echo "==============================================="
@@ -138,7 +142,6 @@ chmod 700 get_helm.sh
 ./get_helm.sh
 helm version
 helm repo add stable https://charts.helm.sh/stable
-
 
 
 # 安装 awscurl 工具 https://github.com/okigan/awscurl
@@ -157,9 +160,9 @@ sudo python3 -m pip install awscurl
 echo "==============================================="
 echo "  Install session-manager ......"
 echo "==============================================="
-curl "https://s3.amazonaws.com/session-manager-downloads/plugin/latest/linux_64bit/session-manager-plugin.rpm" -o "session-manager-plugin.rpm"
+curl "https://s3.amazonaws.com/session-manager-downloads/plugin/latest/linux_64bit/session-manager-plugin.rpm" -o "/tmp/session-manager-plugin.rpm"
 
-sudo yum install -y session-manager-plugin.rpm
+sudo yum install -y /tmp/session-manager-plugin.rpm
 
 session-manager-plugin
 
@@ -174,24 +177,10 @@ echo 'yq() {
 
 
 echo "==============================================="
-echo "  Install c9 to open files in cloud9 ......"
-echo "==============================================="
-npm install -g c9
-# example  c9 open ~/package.json
-
-
-echo "==============================================="
 echo "  Install k9s a Kubernetes CLI To Manage Your Clusters In Style ......"
 echo "==============================================="
 curl -sS https://webinstall.dev/k9s | bash
 # 参考 https://segmentfault.com/a/1190000039755239
-
-
-echo "==============================================="
-echo "  Install kubectx + kubens ......"
-echo "==============================================="
-kubectl krew install ctx
-kubectl krew install ns
 
 
 echo "==============================================="
@@ -238,33 +227,35 @@ echo "==============================================="
 echo "  Install ec2-instance-selector ......"
 echo "==============================================="
 #curl -Lo ec2-instance-selector https://github.com/aws/amazon-ec2-instance-selector/releases/download/v2.3.3/ec2-instance-selector-`uname | tr '[:upper:]' '[:lower:]'`-amd64 && chmod +x ec2-instance-selector
-curl -Lo ec2-instance-selector https://github.com/aws/amazon-ec2-instance-selector/releases/download/v2.4.0/ec2-instance-selector-`uname | tr '[:upper:]' '[:lower:]'`-amd64 && chmod +x ec2-instance-selector
-chmod +x ./ec2-instance-selector
-mkdir -p $HOME/bin && mv ./ec2-instance-selector $HOME/bin/ec2-instance-selector
+# curl -Lo ec2-instance-selector https://github.com/aws/amazon-ec2-instance-selector/releases/download/v2.4.0/ec2-instance-selector-`uname | tr '[:upper:]' '[:lower:]'`-amd64 && chmod +x ec2-instance-selector
+curl -Lo /tmp/ec2-instance-selector https://github.com/aws/amazon-ec2-instance-selector/releases/download/v2.4.1/ec2-instance-selector-`uname | tr '[:upper:]' '[:lower:]'`-amd64 && chmod +x /tmp/ec2-instance-selector
+# chmod +x ./ec2-instance-selector
+mkdir -p $HOME/bin && mv ./tmp/ec2-instance-selector $HOME/bin/ec2-instance-selector
 # ec2-instance-selector -o interactive
+
 
 echo "==============================================="
 echo "  Install kind ......"
 echo "==============================================="
-curl -Lo ./kind "https://kind.sigs.k8s.io/dl/v0.14.0/kind-$(uname)-amd64"
+curl -Lo ./kind "https://kind.sigs.k8s.io/dl/v0.17.0/kind-$(uname)-amd64"
 chmod +x ./kind
-sudo mv ./kind /usr/local/bin/
+sudo mv ./kind /usr/local/bin/kind
 
 
-echo "==============================================="
-echo "  Install Flux CLI ......"
-echo "==============================================="
-curl -s https://fluxcd.io/install.sh | sudo bash
-flux --version
+# echo "==============================================="
+# echo "  Install Flux CLI ......"
+# echo "==============================================="
+# curl -s https://fluxcd.io/install.sh | sudo bash
+# flux --version
 
 
-echo "==============================================="
-echo "  Install argocd ......"
-echo "==============================================="
-curl -sSL -o argocd-linux-amd64 https://github.com/argoproj/argo-cd/releases/latest/download/argocd-linux-amd64
-sudo install -m 555 argocd-linux-amd64 /usr/local/bin/argocd
-rm argocd-linux-amd64
-argocd version --client
+# echo "==============================================="
+# echo "  Install argocd ......"
+# echo "==============================================="
+# curl -sSL -o argocd-linux-amd64 https://github.com/argoproj/argo-cd/releases/latest/download/argocd-linux-amd64
+# sudo install -m 555 argocd-linux-amd64 /usr/local/bin/argocd
+# rm argocd-linux-amd64
+# argocd version --client
 
 
 echo "==============================================="
@@ -290,14 +281,6 @@ terraform --version
 
 
 echo "==============================================="
-echo "  More Aliases ......"
-echo "==============================================="
-cat >> ~/.bashrc <<EOF
-alias c=clear
-EOF
-source ~/.bashrc
-
-echo "==============================================="
 echo "  Config Go ......"
 echo "==============================================="
 go version
@@ -315,6 +298,7 @@ cat >> ~/.bashrc <<EOF
 alias cat=ccat
 EOF
 source ~/.bashrc
+
 
 echo "==============================================="
 echo "  Install telnet ......"
@@ -344,6 +328,7 @@ else
 fi
 pcluster version
 
+
 echo "==============================================="
 echo "  Install wildq ......"
 echo "==============================================="
@@ -366,10 +351,10 @@ echo "==============================================="
 echo "  Install App2Container ......"
 echo "==============================================="
 #https://aws.amazon.com/blogs/containers/modernize-java-and-net-applications-remotely-using-aws-app2container/
-curl -o AWSApp2Container-installer-linux.tar.gz https://app2container-release-us-east-1.s3.us-east-1.amazonaws.com/latest/linux/AWSApp2Container-installer-linux.tar.gz
-sudo tar xvf AWSApp2Container-installer-linux.tar.gz
+curl -o /tmp/AWSApp2Container-installer-linux.tar.gz https://app2container-release-us-east-1.s3.us-east-1.amazonaws.com/latest/linux/AWSApp2Container-installer-linux.tar.gz
+sudo tar xvf /tmp/AWSApp2Container-installer-linux.tar.gz
 # sudo ./install.sh
-echo y |sudo ./install.sh
+echo y |sudo ./tmp/install.sh
 sudo app2container --version
 cat >> ~/.bashrc <<EOF
 alias a2c="sudo app2container"
@@ -380,8 +365,8 @@ source ~/.bashrc
 echo "==============================================="
 echo "  Install flink ......"
 echo "==============================================="
-wget https://archive.apache.org/dist/flink/flink-1.15.3/flink-1.15.3-bin-scala_2.12.tgz
-sudo tar xzvf flink-*.tgz -C /opt
+wget https://archive.apache.org/dist/flink/flink-1.15.3/flink-1.15.3-bin-scala_2.12.tgz -O /tmp/flink-1.15.3.tgz
+sudo tar xzvf /tmp/flink-1.15.3.tgz -C /opt
 sudo chown -R ec2-user /opt/flink-1.15.3
 cat >> ~/.bashrc <<EOF
 export PATH="/opt/flink-1.15.3/bin:$PATH"
@@ -393,8 +378,8 @@ flink -v
 echo "==============================================="
 echo "  Expand disk space ......"
 echo "==============================================="
-wget https://raw.githubusercontent.com/BWCXME/cost-optimized-flink-on-kubernetes/main/resize-ebs.sh
-chmod +x resize-ebs.sh
+wget https://github.com/DATACNTOP/streaming-analytics/blob/main/utils/scripts/resize-ebs.sh -O /tmp/resize-ebs.sh
+chmod +x /tmp/resize-ebs.sh
 ./resize-ebs.sh 1000
 
 
@@ -444,22 +429,22 @@ echo "==============================================="
 sudo yum -y install graphviz
 
 
-echo "==============================================="
-echo "  Install clusterctl ......"
-echo "==============================================="
-curl -L https://github.com/kubernetes-sigs/cluster-api/releases/download/v1.2.4/clusterctl-linux-amd64 -o clusterctl
-chmod +x ./clusterctl
-sudo mv ./clusterctl /usr/local/bin/clusterctl
-clusterctl version
+# echo "==============================================="
+# echo "  Install clusterctl ......"
+# echo "==============================================="
+# curl -L https://github.com/kubernetes-sigs/cluster-api/releases/download/v1.2.4/clusterctl-linux-amd64 -o clusterctl
+# chmod +x ./clusterctl
+# sudo mv ./clusterctl /usr/local/bin/clusterctl
+# clusterctl version
 
 
-echo "==============================================="
-echo "  Install clusterawsadm ......"
-echo "==============================================="
-curl -L https://github.com/kubernetes-sigs/cluster-api-provider-aws/releases/download/v1.5.0/clusterawsadm-linux-amd64 -o clusterawsadm
-chmod +x clusterawsadm
-sudo mv clusterawsadm /usr/local/bin
-clusterawsadm version
+# echo "==============================================="
+# echo "  Install clusterawsadm ......"
+# echo "==============================================="
+# curl -L https://github.com/kubernetes-sigs/cluster-api-provider-aws/releases/download/v1.5.0/clusterawsadm-linux-amd64 -o clusterawsadm
+# chmod +x clusterawsadm
+# sudo mv clusterawsadm /usr/local/bin
+# clusterawsadm version
 
 
 echo "==============================================="
@@ -471,16 +456,28 @@ sudo yum install lynx -y
 echo "==============================================="
 echo "  Install emr-on-eks-custom-image ......"
 echo "==============================================="
-wget https://github.com/awslabs/amazon-emr-on-eks-custom-image-cli/releases/download/v1.03/amazon-emr-on-eks-custom-image-cli-linux-v1.03.zip
-mkdir -p ./emr-on-eks-custom-image
-unzip amazon-emr-on-eks-custom-image-cli-linux-v1.03.zip -d ./emr-on-eks-custom-image
-sudo ./emr-on-eks-custom-image/installation
+wget -O /tmp/amazon-emr-on-eks-custom-image-cli-linux.zip https://github.com/awslabs/amazon-emr-on-eks-custom-image-cli/releases/download/v1.03/amazon-emr-on-eks-custom-image-cli-linux-v1.03.zip
+mkdir -p /opt/emr-on-eks-custom-image
+unzip /tmp/amazon-emr-on-eks-custom-image-cli-linux.zip -d /opt/emr-on-eks-custom-image
+sudo /opt/emr-on-eks-custom-image/installation
 emr-on-eks-custom-image --version
+cat >> ~/.bashrc <<EOF
+alias eec=emr-on-eks-custom-image
+EOF
+source ~/.bashrc
+eec --version
+
+
+echo "==============================================="
+echo "  More Aliases ......"
+echo "==============================================="
+cat >> ~/.bashrc <<EOF
+alias c=clear
+EOF
+source ~/.bashrc
 
 
 # 最后再执行一次 source
 echo "source .bashrc"
 shopt -s expand_aliases
 source ~/.bashrc
-
-
