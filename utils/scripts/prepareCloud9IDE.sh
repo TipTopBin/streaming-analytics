@@ -71,9 +71,9 @@ sudo mv /bin/aws /bin/aws1
 sudo mv ~/anaconda3/bin/aws ~/anaconda3/bin/aws1
 ls -l /usr/local/bin/aws
 rm -fr awscliv2.zip aws
-curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
-unzip awscliv2.zip
-sudo ./aws/install
+curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "/tmp/awscliv2.zip"
+unzip /tmp/awscliv2.zip
+sudo /tmp/aws/install
 which aws_completer
 echo $SHELL
 cat >> ~/.bashrc <<EOF
@@ -87,8 +87,9 @@ echo "==============================================="
 echo "  Install kubectl ......"
 echo "==============================================="
 # 安装 kubectl 并配置自动完成
-curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
-sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
+# curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+curl "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl" -o "/tmp/kubectl"
+sudo install -o root -g root -m 0755 /tmp/kubectl /usr/local/bin/kubectl
 cat >> ~/.bashrc <<EOF
 source <(kubectl completion bash)
 alias k=kubectl
@@ -128,8 +129,8 @@ cat >> ~/.bashrc <<EOF
 export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
 EOF
 source ~/.bashrc
-kubectl krew install ctx # kubectx
-kubectl krew install ns # kubens
+# kubectl krew install ctx # kubectx
+# kubectl krew install ns # kubens
 kubectl krew list
 
 
@@ -137,9 +138,9 @@ kubectl krew list
 echo "==============================================="
 echo "  Install helm ......"
 echo "==============================================="
-curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3
-chmod 700 get_helm.sh
-./get_helm.sh
+curl -fsSL -o /tmp/get_helm.sh https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3
+chmod 700 /tmp/get_helm.sh
+/tmp/get_helm.sh
 helm version
 helm repo add stable https://charts.helm.sh/stable
 
@@ -208,8 +209,8 @@ echo "==============================================="
 echo "==============================================="
 echo "  Install Maven ......"
 echo "==============================================="
-wget https://archive.apache.org/dist/maven/maven-3/3.8.6/binaries/apache-maven-3.8.6-bin.tar.gz
-sudo tar xzvf apache-maven-3.8.6-bin.tar.gz -C /opt
+wget https://archive.apache.org/dist/maven/maven-3/3.8.6/binaries/apache-maven-3.8.6-bin.tar.gz -O /tmp/apache-maven-3.8.6-bin.tar.gz
+sudo tar xzvf /tmp/apache-maven-3.8.6-bin.tar.gz -C /opt
 cat >> ~/.bashrc <<EOF
 export PATH="/opt/apache-maven-3.8.6/bin:$PATH"
 EOF
@@ -220,18 +221,24 @@ mvn --version
 echo "==============================================="
 echo "  Install kubescape ......"
 echo "==============================================="
-curl -s https://raw.githubusercontent.com/armosec/kubescape/master/install.sh | /bin/bash
-
+# curl -s https://raw.githubusercontent.com/armosec/kubescape/master/install.sh | /bin/bash
+curl -s https://raw.githubusercontent.com/armosec/kubescape/master/install.sh -o "/tmp/kubescape.sh"
+/tmp/kubescape.sh
 
 echo "==============================================="
 echo "  Install ec2-instance-selector ......"
 echo "==============================================="
 #curl -Lo ec2-instance-selector https://github.com/aws/amazon-ec2-instance-selector/releases/download/v2.3.3/ec2-instance-selector-`uname | tr '[:upper:]' '[:lower:]'`-amd64 && chmod +x ec2-instance-selector
 # curl -Lo ec2-instance-selector https://github.com/aws/amazon-ec2-instance-selector/releases/download/v2.4.0/ec2-instance-selector-`uname | tr '[:upper:]' '[:lower:]'`-amd64 && chmod +x ec2-instance-selector
-curl -Lo /tmp/ec2-instance-selector https://github.com/aws/amazon-ec2-instance-selector/releases/download/v2.4.1/ec2-instance-selector-`uname | tr '[:upper:]' '[:lower:]'`-amd64 && chmod +x /tmp/ec2-instance-selector
-# chmod +x ./ec2-instance-selector
-mkdir -p $HOME/bin && mv ./tmp/ec2-instance-selector $HOME/bin/ec2-instance-selector
+curl -Lo ec2-instance-selector https://github.com/aws/amazon-ec2-instance-selector/releases/download/v2.4.1/ec2-instance-selector-`uname | tr '[:upper:]' '[:lower:]'`-amd64 && chmod +x ec2-instance-selector
+chmod +x ./ec2-instance-selector
+mkdir -p $HOME/bin && mv ./ec2-instance-selector $HOME/bin/ec2-instance-selector
+ec2-instance-selector --version
 # ec2-instance-selector -o interactive
+cat >> ~/.bashrc <<EOF
+alias ec2s=ec2-instance-selector
+EOF
+source ~/.bashrc
 
 
 echo "==============================================="
@@ -347,19 +354,20 @@ sudo curl -Lo /usr/local/bin/copilot https://github.com/aws/copilot-cli/releases
    && copilot --help
 
 
-echo "==============================================="
-echo "  Install App2Container ......"
-echo "==============================================="
-#https://aws.amazon.com/blogs/containers/modernize-java-and-net-applications-remotely-using-aws-app2container/
-curl -o /tmp/AWSApp2Container-installer-linux.tar.gz https://app2container-release-us-east-1.s3.us-east-1.amazonaws.com/latest/linux/AWSApp2Container-installer-linux.tar.gz
-sudo tar xvf /tmp/AWSApp2Container-installer-linux.tar.gz
-# sudo ./install.sh
-echo y |sudo ./tmp/install.sh
-sudo app2container --version
-cat >> ~/.bashrc <<EOF
-alias a2c="sudo app2container"
-EOF
-source ~/.bashrc
+# echo "==============================================="
+# echo "  Install App2Container ......"
+# echo "==============================================="
+# #https://docs.aws.amazon.com/app2container/latest/UserGuide/start-step1-install.html
+# #https://aws.amazon.com/blogs/containers/modernize-java-and-net-applications-remotely-using-aws-app2container/
+# curl -o /tmp/AWSApp2Container-installer-linux.tar.gz https://app2container-release-us-east-1.s3.us-east-1.amazonaws.com/latest/linux/AWSApp2Container-installer-linux.tar.gz
+# sudo tar xvf /tmp/AWSApp2Container-installer-linux.tar.gz
+# # sudo ./install.sh
+# echo y |sudo ./tmp/install.sh
+# sudo app2container --version
+# cat >> ~/.bashrc <<EOF
+# alias a2c="sudo app2container"
+# EOF
+# source ~/.bashrc
 
 
 echo "==============================================="
