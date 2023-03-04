@@ -21,8 +21,8 @@ phases:
             - pwd
             - ls -al
             # - cd flink-code # if zip file have include the parent folder            
-            - sh ./build_flink_113.sh -f 1.13 -j 11 -s 2.11
-            - docker tag flink:1.13-scala_2.11-java11 $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/flink-base:1.13-scala_2.11-java11-arm
+            - sh ./build_flink_113.sh -f 1.13 -j 8 -s 2.11
+            - docker tag flink:1.13-scala_2.11-java8 $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/flink-base:1.13-scala_2.11-java8-arm
             - docker image ls
         finally:
             - echo Build completed on `date`
@@ -30,4 +30,4 @@ phases:
         commands:
             - echo In post_build phase ...
             - echo Pushing the Docker image...
-            - docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/flink-base:1.13-scala_2.11-java11-arm
+            - docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/flink-base:1.13-scala_2.11-java8-arm
