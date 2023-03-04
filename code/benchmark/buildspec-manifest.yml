@@ -8,7 +8,7 @@ phases:
             - echo In install phase ...
             - export AWS_ACCOUNT_ID=$(aws sts get-caller-identity --output text --query Account)
             - export IMAGE_REPO_NAME=flink-benchmark
-            - export VERSION_TAG=1.15-java8
+            - export VERSION_TAG=1.13-java8
             # - yum update -y
     pre_build:
         commands:
