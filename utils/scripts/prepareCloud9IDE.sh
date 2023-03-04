@@ -88,7 +88,9 @@ echo "  Install kubectl ......"
 echo "==============================================="
 # 安装 kubectl 并配置自动完成
 # curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
-curl "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl" -o "/tmp/kubectl"
+curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+# curl -LO https://dl.k8s.io/release/v1.25.6/bin/linux/amd64/kubectl -o "/tmp/kubectl"
+mv kubectl /tmp/
 sudo install -o root -g root -m 0755 /tmp/kubectl /usr/local/bin/kubectl
 cat >> ~/.bashrc <<EOF
 source <(kubectl completion bash)
