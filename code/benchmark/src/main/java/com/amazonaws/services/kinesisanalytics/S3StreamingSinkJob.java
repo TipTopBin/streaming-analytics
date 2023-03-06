@@ -64,7 +64,7 @@ public class S3StreamingSinkJob {
         
         final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
         final ParameterTool params = ParameterTool.fromArgs(args);
-        env.disableOperatorChaining(); // For debug
+        // env.disableOperatorChaining(); // For debug
 
         checkpointDir = params.get("checkpoint-dir");
         region = params.get("region");
