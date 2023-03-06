@@ -100,6 +100,8 @@ public class S3StreamingSinkJob {
         log.info("Parallelism: {}", env.getParallelism());
         log.info("MaxParallelism: {}", env.getMaxParallelism());
 
+        log.info("---DebugTag: Day1 ---");
+
         // state 
         // https://nightlies.apache.org/flink/flink-docs-stable/docs/ops/state/state_backends/#migrating-from-legacy-backends            
         env.setStateBackend(new HashMapStateBackend());
