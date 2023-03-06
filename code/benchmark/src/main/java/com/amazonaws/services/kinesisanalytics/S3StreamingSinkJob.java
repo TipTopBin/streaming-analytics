@@ -64,7 +64,7 @@ public class S3StreamingSinkJob {
         
         final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
         final ParameterTool params = ParameterTool.fromArgs(args);
-        // env.disableOperatorChaining(); // For debug
+        env.disableOperatorChaining(); // For debug
 
         checkpointDir = params.get("checkpoint-dir");
         region = params.get("region");
@@ -125,7 +125,7 @@ public class S3StreamingSinkJob {
                 // .timeWindow(Time.seconds(10), Time.seconds(5))  // Sliding window definition https://nightlies.apache.org/flink/flink-docs-master/api/java/org/apache/flink/streaming/api/windowing/windows/TimeWindow.html
                 .timeWindow(Time.seconds(windowStart), Time.seconds(windowEnd))  // Sliding window definition https://nightlies.apache.org/flink/flink-docs-master/api/java/org/apache/flink/streaming/api/windowing/windows/TimeWindow.html
                 .max(1) // Calculate mamximum price per stock over the window
-                .setParallelism(operatorParallelism) // Set parallelism for the min operator https://nightlies.apache.org/flink/flink-docs-master/docs/dev/datastream/execution/parallel/
+                // .setParallelism(operatorParallelism) // Set parallelism for the min operator https://nightlies.apache.org/flink/flink-docs-master/docs/dev/datastream/execution/parallel/
                 // 并行度通过提交任务时传入
                 .map(value -> value.f0 + "," + value.f1 + "," + value.f1.toString() + "\n")
                 .addSink(createS3SinkFromStaticConfig()).name("S3_sink");
