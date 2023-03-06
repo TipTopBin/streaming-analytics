@@ -47,3 +47,12 @@ error: exec plugin: invalid apiVersion "client.authentication.k8s.io/v1alpha1"
 eksctl utils write-kubeconfig --cluster=$EKS_CLUSTER_NAME
 ```
 
+6.  
+
+```
+couldn't get current server API group list: the server has asked for the client to provide credentials
+
+error: You must be logged in to the server (the server has asked for the client to provide credentials)
+```
+
+eksctl utils associate-iam-oidc-provider --cluster=$EKS_CLUSTER_NAME
