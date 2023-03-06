@@ -131,9 +131,13 @@ cat >> ~/.bashrc <<EOF
 export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
 EOF
 source ~/.bashrc
+kubectl krew install resource-capacity
 # kubectl krew install ctx # kubectx
 # kubectl krew install ns # kubens
 kubectl krew list
+# k resource-capacity --util --sort cpu.util 
+# k resource-capacity --pods --util --pod-labels app.kubernetes.io/name=aws-node --namespace kube-system --sort cpu.util
+# k get po -l app.kubernetes.io/name=aws-node -n kube-system -o wide
 
 
 # 安装 helm
