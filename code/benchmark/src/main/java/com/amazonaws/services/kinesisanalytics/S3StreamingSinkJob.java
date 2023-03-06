@@ -100,7 +100,7 @@ public class S3StreamingSinkJob {
         log.info("Parallelism: {}", env.getParallelism());
         log.info("MaxParallelism: {}", env.getMaxParallelism());
 
-        log.info("---DebugTag: Day1 ---");
+        log.info("---DebugTag: Day5 ---");
 
         // state 
         // https://nightlies.apache.org/flink/flink-docs-stable/docs/ops/state/state_backends/#migrating-from-legacy-backends            
@@ -127,6 +127,7 @@ public class S3StreamingSinkJob {
                 // .timeWindow(Time.seconds(10), Time.seconds(5))  // Sliding window definition https://nightlies.apache.org/flink/flink-docs-master/api/java/org/apache/flink/streaming/api/windowing/windows/TimeWindow.html
                 .timeWindow(Time.seconds(windowStart), Time.seconds(windowEnd))  // Sliding window definition https://nightlies.apache.org/flink/flink-docs-master/api/java/org/apache/flink/streaming/api/windowing/windows/TimeWindow.html
                 .max(1) // Calculate mamximum price per stock over the window
+                .setParallelism(operatorParallelism) // Set parallelism for the min operator
                 .map(value -> value.f0 + "," + value.f1 + "," + value.f1.toString() + "\n")
                 .addSink(createS3SinkFromStaticConfig()).name("S3_sink");
 

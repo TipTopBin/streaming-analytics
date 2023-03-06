@@ -47,7 +47,7 @@ error: exec plugin: invalid apiVersion "client.authentication.k8s.io/v1alpha1"
 eksctl utils write-kubeconfig --cluster=$EKS_CLUSTER_NAME
 ```
 
-6.  
+6. credentials 问题
 
 ```
 couldn't get current server API group list: the server has asked for the client to provide credentials
@@ -55,4 +55,10 @@ couldn't get current server API group list: the server has asked for the client 
 error: You must be logged in to the server (the server has asked for the client to provide credentials)
 ```
 
+```
 eksctl utils associate-iam-oidc-provider --cluster=$EKS_CLUSTER_NAME
+```
+
+7. 并行度问题
+
+注意检查版本，自定义版本是 1.13.6，如果版本不一致，并行度设置不会生效。
