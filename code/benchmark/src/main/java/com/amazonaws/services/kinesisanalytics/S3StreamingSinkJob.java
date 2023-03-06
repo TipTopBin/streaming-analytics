@@ -36,6 +36,7 @@ public class S3StreamingSinkJob {
     private static int checkpointInterval = 10000;
     private static int windowStart = 10;
     private static int windowEnd = 5;
+    private static int operatorParallelism = 8; // default
 
     private static final Logger log = LoggerFactory.getLogger(S3StreamingSinkJob.class);
     
@@ -69,7 +70,6 @@ public class S3StreamingSinkJob {
         region = params.get("region");
         s3SinkPath = params.get("s3SinkPath"); 
         inputStreamName = params.get("inputStreamName"); 
-        operatorParallelism = 8;
 
         if (params.get("windowStart") != null) {
             windowStart = Integer.parseInt(params.get("windowStart"));
