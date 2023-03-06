@@ -95,6 +95,11 @@ public class S3StreamingSinkJob {
 		log.info("inputStreamName: {}, s3SinkPath: {}, region: {}, checkpointInterval: {}, checkpointDir: {}, windowStart: {}, windowEnd: {}, operatorParallelism: {}",
          inputStreamName, s3SinkPath, region, checkpointInterval, checkpointDir, windowStart, windowEnd, operatorParallelism);
 
+        log.info("--- Env Debug---")
+        log.info("ENV toString: {}", env.toString);
+        log.info("Parallelism: {}", getParallelism());
+        log.info("MaxParallelism: {}", getMaxParallelism());
+
         // state 
         // https://nightlies.apache.org/flink/flink-docs-stable/docs/ops/state/state_backends/#migrating-from-legacy-backends            
         env.setStateBackend(new HashMapStateBackend());
