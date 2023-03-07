@@ -62,3 +62,8 @@ eksctl utils associate-iam-oidc-provider --cluster=$EKS_CLUSTER_NAME
 7. 并行度问题
 
 注意检查版本，自定义版本是 1.13.6，如果版本不一致，并行度设置不会生效。
+
+
+8. KDS 分片配置
+
+注意分片配置与 Flink 作业的联动。

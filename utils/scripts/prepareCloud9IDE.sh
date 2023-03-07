@@ -131,14 +131,27 @@ cat >> ~/.bashrc <<EOF
 export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
 EOF
 source ~/.bashrc
+kubectl krew update
 kubectl krew install resource-capacity
+kubectl krew install count
+kubectl krew install get-all
+kubectl krew install ktop
+# kubectl krew install lineage
 # kubectl krew install ctx # kubectx
 # kubectl krew install ns # kubens
+#kubectl krew install custom-cols
+#kubectl krew install explore
+#kubectl krew install flame
+#kubectl krew install foreach
+#kubectl krew install fuzzy
 kubectl krew list
 # k resource-capacity --util --sort cpu.util 
 # k resource-capacity --pods --util --pod-labels app.kubernetes.io/name=aws-node --namespace kube-system --sort cpu.util
 # k get po -l app.kubernetes.io/name=aws-node -n kube-system -o wide
-
+# kubectl ktop
+# kubectl lineage --version
+# k get-all
+# k count pod
 
 # 安装 helm
 echo "==============================================="
