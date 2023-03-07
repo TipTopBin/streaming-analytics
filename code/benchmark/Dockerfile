@@ -2,7 +2,7 @@ FROM public.ecr.aws/docker/library/maven:3.8.6-amazoncorretto-8 AS builder
 COPY src/ /home/app/src
 COPY pom.xml /home/app/pom.xml
 RUN ls -l /home/app
-RUN mvn -f /home/app/pom.xml clean package -Dflink.version=1.13.2
+RUN mvn -f /home/app/pom.xml clean package -Dflink.version=1.13.6
 
 # FROM flink:1.13.2
 FROM public.ecr.aws/w3z8i2u5/flink-base:1.13-scala_2.11-java8

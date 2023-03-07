@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: debug
+  name: debug
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: debug
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: debug
+    spec:
+      # nodeSelector:
+      #   type: "karpenter"    
+      containers:
+      - image: nginx
+        name: nginx
+        resources: {}
+      affinity: 
+          nodeAffinity: 
+              requiredDuringSchedulingIgnoredDuringExecution: 
+                nodeSelectorTerms: 
+                - matchExpressions: 
+                  - key: 'eks.amazonaws.com/capacityType' 
+                    operator: In 
+                    values:
+                    - ON_DEMAND
+                  # - key: 'karpenter.sh/capacity-type' 
+                  #   operator: In 
+                  #   values: 
+                  #   - on-demand   
