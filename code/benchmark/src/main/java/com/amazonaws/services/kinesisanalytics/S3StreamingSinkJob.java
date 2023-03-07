@@ -64,7 +64,7 @@ public class S3StreamingSinkJob {
         
         final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
         final ParameterTool params = ParameterTool.fromArgs(args);
-        // env.disableOperatorChaining(); // For debug
+        env.disableOperatorChaining(); // For debug
 
         checkpointDir = params.get("checkpoint-dir");
         region = params.get("region");
@@ -100,8 +100,6 @@ public class S3StreamingSinkJob {
         log.info("Parallelism: {}", env.getParallelism());
         log.info("MaxParallelism: {}", env.getMaxParallelism());
 
-        log.info("---DebugTag: Day5 ---");
-
         // state 
         // https://nightlies.apache.org/flink/flink-docs-stable/docs/ops/state/state_backends/#migrating-from-legacy-backends            
         env.setStateBackend(new HashMapStateBackend());
@@ -118,7 +116,10 @@ public class S3StreamingSinkJob {
 
         ObjectMapper jsonParser = new ObjectMapper();
 
-        // https://nightlies.apache.org/flink/flink-docs-master/docs/dev/datastream/operators/windows/
+
+        // DataStream<String> SourceFromKinesis = createSourceFromStaticConfig(env);
+        // SourceFromKinesis.addSink(createS3SinkFromStaticConfig());
+
         input.map(value -> {
             JsonNode jsonNode = jsonParser.readValue(value, JsonNode.class);
             return new Tuple2<>(jsonNode.get("TICKER").asText(), jsonNode.get("PRICE").asDouble());
@@ -131,6 +132,15 @@ public class S3StreamingSinkJob {
                 .map(value -> value.f0 + "," + value.f1 + "," + value.f1.toString() + "\n")
                 .addSink(createS3SinkFromStaticConfig()).name("S3_sink");
 
+        // input.flatMap(new Tokenizer()) // Tokenizer for generating words
+        //         .keyBy(0) // Logically partition the stream for each word
+        //         .timeWindow(Time.minutes(1)) // Tumbling window definition
+        //         .sum(1) // Sum the number of words per partition
+        //         .map(value -> value.f0 + " count: " + value.f1.toString() + "\n")
+        //         .addSink(createS3SinkFromStaticConfig());
+
         env.execute("Flink S3 Streaming Sink Job");
     }
+    
+
 }
