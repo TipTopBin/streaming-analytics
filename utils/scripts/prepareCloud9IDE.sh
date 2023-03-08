@@ -1,3 +1,5 @@
+#https://github.com/aws-samples/aws-do-eks
+#https://github.com/aws-samples/aws-do-eks/tree/main/Container-Root/eks/ops/setup
 echo "==============================================="
 echo "  Config envs ......"
 echo "==============================================="
@@ -136,14 +138,16 @@ kubectl krew install resource-capacity
 kubectl krew install count
 kubectl krew install get-all
 kubectl krew install ktop
+kubectl krew install ctx # kubectx
+kubectl krew install ns # kubens
 # kubectl krew install lineage
-# kubectl krew install ctx # kubectx
-# kubectl krew install ns # kubens
 #kubectl krew install custom-cols
 #kubectl krew install explore
 #kubectl krew install flame
 #kubectl krew install foreach
 #kubectl krew install fuzzy
+#kubectl krew index add kvaps https://github.com/kvaps/krew-index
+#kubectl krew install kvaps/node-shell
 kubectl krew list
 # k resource-capacity --util --sort cpu.util 
 # k resource-capacity --pods --util --pod-labels app.kubernetes.io/name=aws-node --namespace kube-system --sort cpu.util
@@ -152,6 +156,21 @@ kubectl krew list
 # kubectl lineage --version
 # k get-all
 # k count pod
+# k node-shell <node>
+
+echo "==============================================="
+echo "  Install kubetail ......"
+echo "==============================================="
+curl -o /tmp/kubetail https://raw.githubusercontent.com/johanhaleby/kubetail/master/kubetail
+chmod +x /tmp/kubetail
+sudo mv /tmp/kubetail /usr/local/bin/kubetail
+cat >> ~/.bashrc <<EOF
+alias kt=kubetail
+EOF
+source ~/.bashrc
+
+kon=kubeon
+koff=kubeoff
 
 # 安装 helm
 echo "==============================================="
@@ -495,13 +514,45 @@ source ~/.bashrc
 eec --version
 
 
+#https://github.com/awslabs/eks-node-viewer
+# echo "==============================================="
+# echo "  Install eks-node-viewer ......"
+# echo "==============================================="
+# go env -w GOPROXY=direct
+# go install github.com/awslabs/eks-node-viewer/cmd/eks-node-viewer@latest
+# export GOBIN=${GOBIN:-~/go/bin}
+# echo "export PATH=\$PATH:$GOBIN" >> ~/.bashrc
+# cat >> ~/.bashrc <<EOF
+# alias nv='eks-node-viewer'
+# EOF
+# source ~/.bashrc
+
+
+# echo "==============================================="
+# echo "  Install kube-ps1.sh ......"
+# echo "==============================================="
+# curl -L -o ~/kube-ps1.sh https://github.com/jonmosco/kube-ps1/raw/master/kube-ps1.sh
+# cat << EOF >> ~/.bashrc
+# alias kon='touch ~/.kubeon; source ~/.bashrc'
+# alias koff='rm -f ~/.kubeon; source ~/.bashrc'
+# if [ -f ~/.kubeon ]; then
+#         source ~/kube-ps1.sh
+#         PS1='[\u@\h \W \$(kube_ps1)]\$ '
+# fi
+# EOF
+# source ~/.bashrc
+
+
 echo "==============================================="
 echo "  More Aliases ......"
 echo "==============================================="
 cat >> ~/.bashrc <<EOF
 alias c=clear
+alias ll='ls -alh --color=auto'
+export TERM=xterm-256color
 EOF
 source ~/.bashrc
+
 
 
 # 最后再执行一次 source
