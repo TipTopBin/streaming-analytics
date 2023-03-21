@@ -169,8 +169,6 @@ alias kt=kubetail
 EOF
 source ~/.bashrc
 
-kon=kubeon
-koff=kubeoff
 
 # 安装 helm
 echo "==============================================="
@@ -518,14 +516,14 @@ eec --version
 # echo "==============================================="
 # echo "  Install eks-node-viewer ......"
 # echo "==============================================="
-# go env -w GOPROXY=direct
-# go install github.com/awslabs/eks-node-viewer/cmd/eks-node-viewer@latest
-# export GOBIN=${GOBIN:-~/go/bin}
-# echo "export PATH=\$PATH:$GOBIN" >> ~/.bashrc
-# cat >> ~/.bashrc <<EOF
-# alias nv='eks-node-viewer'
-# EOF
-# source ~/.bashrc
+go env -w GOPROXY=direct
+go install github.com/awslabs/eks-node-viewer/cmd/eks-node-viewer@latest
+export GOBIN=${GOBIN:-~/go/bin}
+echo "export PATH=\$PATH:$GOBIN" >> ~/.bashrc
+cat >> ~/.bashrc <<EOF
+alias nv='eks-node-viewer'
+EOF
+source ~/.bashrc
 
 
 # echo "==============================================="
