@@ -24,12 +24,23 @@ echo "  Config Cloud9 ......"
 echo "==============================================="
 aws cloud9 update-environment --environment-id $C9_PID --managed-credentials-action DISABLE
 rm -vf ${HOME}/.aws/credentials
+npm install -g c9 # Install c9 to open files in cloud9 
+# example  c9 open ~/package.json
+
 
 echo "==============================================="
-echo "  Install c9 to open files in cloud9 ......"
+echo "  Upgrade Python to 3.8 ......"
 echo "==============================================="
-npm install -g c9
-# example  c9 open ~/package.json
+sudo amazon-linux-extras install python3.8 -y
+python -m ensurepip --upgrade --user
+# sudo yum update -y
+cat >> ~/.bashrc <<EOF
+alias python='/usr/bin/python3.8'
+EOF
+source ~/.bashrc
+
+# Install pip
+curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py; python get-pip.py; rm -f get-pip.py
 
 echo "==============================================="
 echo "  Install eksctl ......"
@@ -540,6 +551,16 @@ source ~/.bashrc
 # EOF
 # source ~/.bashrc
 
+echo "==============================================="
+echo "  Cloudwatch Dashboard Generator ......"
+echo "==============================================="
+# https://github.com/aws-samples/aws-cloudwatch-dashboard-generator
+# mkdir -p ~/environment/sre && cd ~/environment/sre
+# # git clone https://github.com/aws-samples/aws-cloudwatch-dashboard-generator.git 
+# git clone https://github.com/CLOUDCNTOP/aws-cloudwatch-dashboard-generator.git
+# cd aws-cloudwatch-dashboard-generator
+# pip install -r r_requirements.txt
+
 
 echo "==============================================="
 echo "  More Aliases ......"
@@ -550,7 +571,6 @@ alias ll='ls -alh --color=auto'
 export TERM=xterm-256color
 EOF
 source ~/.bashrc
-
 
 
 # 最后再执行一次 source
