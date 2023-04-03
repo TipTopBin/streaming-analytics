@@ -562,6 +562,19 @@ echo "==============================================="
 # pip install -r r_requirements.txt
 
 
+# echo "==============================================="
+# echo "  S3 Mountpoint ......"
+# echo "==============================================="
+# sudo yum install fuse fuse-devel cmake3 clang-devel -y
+# curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs -o /tmp/sh.rustup.rs
+# sh /tmp/sh.rustup.rs
+# source "$HOME/.cargo/env"
+# git clone --recurse-submodules https://github.com/awslabs/mountpoint-s3.git /tmp/mountpoint-s3
+# cd /tmp/mountpoint-s3
+# cargo build --release
+# sudo cp ./target/release/mount-s3 /usr/local/bin/
+
+
 echo "==============================================="
 echo "  More Aliases ......"
 echo "==============================================="
