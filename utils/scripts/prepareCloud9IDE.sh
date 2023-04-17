@@ -576,6 +576,13 @@ echo "==============================================="
 
 
 echo "==============================================="
+echo "  Network Utilites ......"
+echo "==============================================="
+#https://repost.aws/knowledge-center/network-issue-vpc-onprem-ig
+sudo yum install mtr traceroute -y
+
+
+echo "==============================================="
 echo "  More Aliases ......"
 echo "==============================================="
 cat >> ~/.bashrc <<EOF
