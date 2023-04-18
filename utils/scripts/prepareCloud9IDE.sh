@@ -583,6 +583,13 @@ sudo yum install mtr traceroute -y
 
 
 echo "==============================================="
+echo " dos2unix ......"
+echo "==============================================="
+sudo yum install dos2unix
+# dos2unix xxx.sh
+
+
+echo "==============================================="
 echo "  More Aliases ......"
 echo "==============================================="
 cat >> ~/.bashrc <<EOF
