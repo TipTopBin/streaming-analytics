@@ -19,6 +19,7 @@ aws configure set region $AWS_REGION
 source ~/.bashrc
 aws sts get-caller-identity
 
+
 echo "==============================================="
 echo "  Config Cloud9 ......"
 echo "==============================================="
@@ -41,6 +42,7 @@ source ~/.bashrc
 
 # Install pip
 curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py; python get-pip.py; rm -f get-pip.py
+
 
 echo "==============================================="
 echo "  Install eksctl ......"
@@ -415,6 +417,18 @@ sudo curl -Lo /usr/local/bin/copilot https://github.com/aws/copilot-cli/releases
 # alias a2c="sudo app2container"
 # EOF
 # source ~/.bashrc
+
+
+echo "==============================================="
+echo "  Install java 8 ......"
+echo "==============================================="
+sudo amazon-linux-extras enable corretto8
+sudo yum clean metadata
+sudo yum install java-1.8.0-amazon-corretto-devel -y
+#sudo alternatives --config java
+#sudo update-alternatives --config javac
+java -version
+javac -version
 
 
 echo "==============================================="
