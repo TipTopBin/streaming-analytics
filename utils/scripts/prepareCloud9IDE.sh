@@ -121,11 +121,20 @@ sudo curl https://raw.githubusercontent.com/blendle/kns/master/bin/kns -o /usr/l
 sudo curl https://raw.githubusercontent.com/blendle/kns/master/bin/ktx -o /usr/local/bin/ktx && sudo chmod +x $_
 # echo "alias kgn='kubectl get nodes -L beta.kubernetes.io/arch -L eks.amazonaws.com/capacityType -L beta.kubernetes.io/instance-type -L eks.amazonaws.com/nodegroup -L topology.kubernetes.io/zone -L karpenter.sh/provisioner-name -L karpenter.sh/capacity-type'" | tee -a ~/.bashrc
 #echo "alias kgn='kubectl get nodes -L beta.kubernetes.io/arch -L eks.amazonaws.com/capacityType -L beta.kubernetes.io/instance-type -L eks.amazonaws.com/nodegroup -L topology.kubernetes.io/zone'" | tee -a ~/.bashrc
+echo "alias kk='kubectl get nodes -L beta.kubernetes.io/arch -L eks.amazonaws.com/capacityType -L karpenter.sh/capacity-type -L node.kubernetes.io/instance-type -L topology.kubernetes.io/zone -L karpenter.sh/provisioner-name'" | tee -a ~/.bashrc
 echo "alias kgn='kubectl get nodes -L beta.kubernetes.io/arch -L eks.amazonaws.com/capacityType -L node.kubernetes.io/instance-type -L eks.amazonaws.com/nodegroup -L topology.kubernetes.io/zone'" | tee -a ~/.bashrc
 # echo "alias kgnk='kubectl get nodes -L beta.kubernetes.io/arch -L eks.amazonaws.com/capacityType -L node.kubernetes.io/instance-type -L eks.amazonaws.com/nodegroup -L topology.kubernetes.io/zone -L karpenter.sh/provisioner-name -L karpenter.sh/capacity-type'" | tee -a ~/.bashrc
-echo "alias kk='kubectl get nodes -L beta.kubernetes.io/arch -L eks.amazonaws.com/capacityType -L karpenter.sh/capacity-type -L node.kubernetes.io/instance-type -L topology.kubernetes.io/zone -L karpenter.sh/provisioner-name'" | tee -a ~/.bashrc
 echo "alias kgp='kubectl get po -o wide'" | tee -a ~/.bashrc
-echo "alias kaf='kubectl apply -f'" | tee -a ~/.bashrc
+echo "alias kgd='kubectl get deployment -o wide'" | tee -a ~/.bashrc
+echo "alias kgs='kubectl get svc -o wide'" | tee -a ~/.bashrc
+echo "alias kdn='kubectl describe node'" | tee -a ~/.bashrc
+echo "alias kdp='kubectl describe po'" | tee -a ~/.bashrc
+echo "alias kdd='kubectl describe deployment'" | tee -a ~/.bashrc
+echo "alias kds='kubectl describe svc'" | tee -a ~/.bashrc
+echo 'export dry="--dry-run=client -o yaml"' | tee -a ~/.bashrc
+echo "alias ka='kubectl apply'" | tee -a ~/.bashrc
+echo "alias kr='kubectl run $dry'" | tee -a ~/.bashrc
+echo "alias ke='kubectl explain'" | tee -a ~/.bashrc
 source ~/.bashrc
 
 
@@ -606,9 +615,19 @@ sudo yum install dos2unix
 echo "==============================================="
 echo "  More Aliases ......"
 echo "==============================================="
+# .vimrc
+cat > ~/.vimrc <<EOF
+set number
+set expandtab
+set tabstop=2
+set shiftwidth=2
+autocmd FileType yaml setlocal ts=2 sts=2 sw=2 expandtab
+EOF
+
 cat >> ~/.bashrc <<EOF
 alias c=clear
 alias ll='ls -alh --color=auto'
+alias jc=/bin/journalctl
 export TERM=xterm-256color
 EOF
 source ~/.bashrc
