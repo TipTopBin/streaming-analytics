@@ -631,7 +631,7 @@ alias jc=/bin/journalctl
 export TERM=xterm-256color
 EOF
 source ~/.bashrc
-
+# journalctl -u kubelet | grep error 
 
 # 最后再执行一次 source
 echo "source .bashrc"
