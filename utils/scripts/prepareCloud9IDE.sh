@@ -283,6 +283,7 @@ echo "==============================================="
 curl -s https://raw.githubusercontent.com/armosec/kubescape/master/install.sh -o "/tmp/kubescape.sh"
 /tmp/kubescape.sh
 
+
 echo "==============================================="
 echo "  Install ec2-instance-selector ......"
 echo "==============================================="
@@ -432,7 +433,7 @@ echo "==============================================="
 echo "  Install java 8 ......"
 echo "==============================================="
 sudo amazon-linux-extras enable corretto8
-sudo yum clean metadata
+# sudo yum clean metadata
 sudo yum install java-1.8.0-amazon-corretto-devel -y
 #sudo alternatives --config java
 #sudo update-alternatives --config javac
@@ -458,7 +459,7 @@ echo "  Expand disk space ......"
 echo "==============================================="
 wget https://raw.githubusercontent.com/DATACNTOP/streaming-analytics/main/utils/scripts/resize-ebs.sh -O /tmp/resize-ebs.sh
 chmod +x /tmp/resize-ebs.sh
-/tmp/resize-ebs.sh 1000
+/tmp/resize-ebs.sh 500
 
 
 echo "==============================================="
@@ -574,9 +575,9 @@ source ~/.bashrc
 # EOF
 # source ~/.bashrc
 
-echo "==============================================="
-echo "  Cloudwatch Dashboard Generator ......"
-echo "==============================================="
+# echo "==============================================="
+# echo "  Cloudwatch Dashboard Generator ......"
+# echo "==============================================="
 # https://github.com/aws-samples/aws-cloudwatch-dashboard-generator
 # mkdir -p ~/environment/sre && cd ~/environment/sre
 # # git clone https://github.com/aws-samples/aws-cloudwatch-dashboard-generator.git 
@@ -608,7 +609,7 @@ sudo yum install mtr traceroute -y
 echo "==============================================="
 echo " dos2unix ......"
 echo "==============================================="
-sudo yum install dos2unix
+sudo yum install dos2unix -y
 # dos2unix xxx.sh
 
 
