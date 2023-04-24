@@ -536,7 +536,7 @@ echo "==============================================="
 echo "  Install emr-on-eks-custom-image ......"
 echo "==============================================="
 wget -O /tmp/amazon-emr-on-eks-custom-image-cli-linux.zip https://github.com/awslabs/amazon-emr-on-eks-custom-image-cli/releases/download/v1.03/amazon-emr-on-eks-custom-image-cli-linux-v1.03.zip
-mkdir -p /opt/emr-on-eks-custom-image
+sudo mkdir -p /opt/emr-on-eks-custom-image
 unzip /tmp/amazon-emr-on-eks-custom-image-cli-linux.zip -d /opt/emr-on-eks-custom-image
 sudo /opt/emr-on-eks-custom-image/installation
 emr-on-eks-custom-image --version
@@ -611,6 +611,25 @@ echo " dos2unix ......"
 echo "==============================================="
 sudo yum install dos2unix -y
 # dos2unix xxx.sh
+
+
+echo "==============================================="
+echo " s5cmd ......"
+echo "==============================================="
+#https://github.com/peak/s5cmd
+export S5CMD_URL=$(curl -s https://api.github.com/repos/peak/s5cmd/releases/latest \
+| grep "browser_download_url.*_Linux-64bit.tar.gz" \
+| cut -d : -f 2,3 \
+| tr -d \")
+# echo $S5CMD_URL
+wget $S5CMD_URL -O /tmp/s5cmd.tar.gz
+sudo mkdir -p /opt/s5cmd/
+sudo tar xzvf /tmp/s5cmd.tar.gz -C /opt/s5cmd
+cat >> ~/.bashrc <<EOF
+export PATH="/opt/s5cmd:$PATH"
+EOF
+source ~/.bashrc
+s5cmd version
 
 
 echo "==============================================="
